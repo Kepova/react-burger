@@ -1,0 +1,44 @@
+.burgerConstructor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-self: left;
+}
+
+.burgerFillingsContainer {
+    flex-grow: 1;
+    position: relative;
+}
+
+.burgerFillings {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    height: 100%;
+    flex-grow: 1;
+    position: absolute;
+    inset: 0;
+}
+
+.burgerFilling {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.burgerFilling:last-child {
+    padding-bottom: 0;
+}
+
+.orderInfo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.orderInfo svg {
+    width: 36px;
+    height: 36px;
+}

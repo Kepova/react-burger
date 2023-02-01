@@ -1,0 +1,22 @@
+.card__title {
+    text-align: left;
+    color: #F2F2F3;
+}
+
+.cards__container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.card__container {
+    max-width: 272px;
+    height: 208px;
+    position: relative;
+}
+
+.card__price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
