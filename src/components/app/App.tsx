@@ -6,19 +6,28 @@ import { getBurgerIngridients } from '../../utils/api';
 
 function App() {
   const [dataBurgerIngridients, setDataBurgerIngridients] = useState([]);
+  const [errorGetDataIngridients, setErrorGetDataIngridients] = useState(null);
 
   // получить данные с ингридиентами
   useEffect(() => {
     getBurgerIngridients()
       .then((dataIngridients) => {
         setDataBurgerIngridients(dataIngridients.data);
+        setErrorGetDataIngridients(null);
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        setErrorGetDataIngridients(err);
+        console.log(err);
+      })
   }, [])
 
   return (
     <div className={`${style.page}`}>
       <AppHeader />
+      {errorGetDataIngridients &&
+        <p className={`${style.errMessage} text text_type_main-default`}>
+          Возникла {errorGetDataIngridients}, попробуйте обновить страницу.
+        </p>}
       <Main dataBurgerIngridients={dataBurgerIngridients} />
     </div>
   );

@@ -1,6 +1,7 @@
 import Modal from "../modal/modal";
 import style from './ingredient-details.module.css';
 import PropTypes from 'prop-types';
+import propTypesDataIngridient from '../../utils/prop-types';
 
 const IngredientDetails = ({ ingridient, isOpenModal, handleClickClose }) => {
     return (
@@ -32,20 +33,7 @@ const IngredientDetails = ({ ingridient, isOpenModal, handleClickClose }) => {
 };
 
 IngredientDetails.propTypes = {
-    ingridient: PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.oneOf(['bun', 'sauce', 'main']),
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-    }).isRequired,
+    ingridient: propTypesDataIngridient.isRequired,
     isOpenModal: PropTypes.bool.isRequired,
     handleClickClose: PropTypes.func.isRequired
 };

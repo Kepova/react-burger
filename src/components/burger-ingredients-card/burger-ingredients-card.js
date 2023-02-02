@@ -4,6 +4,7 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import useEnableModal from '../../hooks/use-enable-modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import PropTypes from 'prop-types';
+import propTypesDataIngridient from '../../utils/prop-types';
 
 function BurgerIngredientsCard({ name, title, dataCards }) {
     const { handleClickOpen, handleClickClose, isOpenModal } = useEnableModal(false);
@@ -44,20 +45,7 @@ function BurgerIngredientsCard({ name, title, dataCards }) {
 BurgerIngredientsCard.propTypes = {
     name: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    dataCards: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.oneOf(['bun', 'sauce', 'main']),
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-    })).isRequired
+    dataCards: PropTypes.arrayOf(propTypesDataIngridient).isRequired
 };
 
 export default BurgerIngredientsCard;

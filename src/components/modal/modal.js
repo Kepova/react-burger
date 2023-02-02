@@ -15,7 +15,6 @@ const Modal = ({ handleClickClose, isOpenModal, title, children }) => {
     };
 
     const escClick = (e) => {
-        console.log(e.key)
         if (e.key === "Escape") {
             handleClickClose();
         }

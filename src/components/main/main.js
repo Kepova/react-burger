@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import mainStyle from './main.module.css';
+import PropTypes from 'prop-types';
+import propTypesDataIngridient from '../../utils/prop-types';
 
 function Main({ dataBurgerIngridients }) {
     return (
@@ -14,20 +15,7 @@ function Main({ dataBurgerIngridients }) {
 };
 
 Main.propTypes = {
-    dataBurgerIngridients: PropTypes.arrayOf(PropTypes.shape({
-        _id: PropTypes.string,
-        name: PropTypes.string,
-        type: PropTypes.oneOf(['bun', 'sauce', 'main']),
-        proteins: PropTypes.number,
-        fat: PropTypes.number,
-        carbohydrates: PropTypes.number,
-        calories: PropTypes.number,
-        price: PropTypes.number,
-        image: PropTypes.string,
-        image_mobile: PropTypes.string,
-        image_large: PropTypes.string,
-        __v: PropTypes.number
-    })).isRequired
+    dataBurgerIngridients: PropTypes.arrayOf(propTypesDataIngridient).isRequired
 };
 
 export default Main;
