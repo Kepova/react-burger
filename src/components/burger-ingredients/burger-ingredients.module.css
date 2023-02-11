@@ -1,0 +1,28 @@
+.ingredients {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-self: right;
+}
+
+.burgerIngridients {
+    display: flex;
+}
+
+.ingredients__listContainer {
+    flex-grow: 1;
+    position: relative;
+}
+
+.ingredients__list {
+    overflow-y: overlay;
+    box-sizing: border-box;
+    height: 100%;
+    flex-grow: 1;
+    position: absolute;
+    inset: 0;
+}
+
+.ingredients__list::-webkit-scrollbar-track {
+    margin-top: 40px;
+}

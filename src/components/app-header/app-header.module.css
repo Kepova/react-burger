@@ -1,0 +1,42 @@
+.header {
+    background-color: #1C1C21;
+    width: 100%;
+}
+
+.header__nav {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.header__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.header__item {
+    display: flex;
+}
+
+.header__link {
+    text-decoration: none;
+    color: #F2F2F3;
+}
+
+.header__link_active {
+    color: #8585AD;
+}
+
+.header__itemProfile {
+    margin-left: auto;
+}
+
+.logo {
+    position: absolute;
+    left: calc(50% - 145px)
+}
