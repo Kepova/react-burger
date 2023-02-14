@@ -1,13 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-scroll';
 import burgerIngridientsStyle from './burger-ingredients.module.css';
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card';
-import PropTypes from 'prop-types';
-import propTypesDataIngridient from '../../utils/prop-types';
+import { IngredientsContext } from '../../services/ingredients-context';
 
-function BurgerIngredients({ dataBurgerIngridients }) {
-
+function BurgerIngredients() {
+    const dataBurgerIngridients = useContext(IngredientsContext);
     const [current, setCurrent] = useState('bun');
 
     const filterIngridients = (typeGroup) => {
@@ -48,10 +47,6 @@ function BurgerIngredients({ dataBurgerIngridients }) {
             </div>
         </section>
     )
-};
-
-BurgerIngredients.propTypes = {
-    dataBurgerIngridients: PropTypes.arrayOf(propTypesDataIngridient).isRequired
 };
 
 export default BurgerIngredients;
