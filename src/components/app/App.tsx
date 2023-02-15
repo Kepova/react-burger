@@ -22,7 +22,6 @@ function App() {
       })
       .catch(err => {
         handleErrorOpen(err);
-        console.log(err);
       })
   }, [])
 
