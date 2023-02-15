@@ -6,11 +6,11 @@ import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-component
 import Modal from '../modal/modal';
 import style from './order-details.module.css';
 
-const OrderDetails = ({ isOpenModal, handleClickClose }) => {
+const OrderDetails = ({ isOpenModal, handleClickClose, dataOrder }) => {
     return (
         <Modal isOpenModal={isOpenModal} handleClickClose={handleClickClose}>
             <div className={`${style.orderContainer} pb-15`}>
-                <h3 className={`${style.orderTitle} text text_type_digits-large pb-8`}>034536</h3>
+                <h3 className={`${style.orderTitle} text text_type_digits-large pb-8`}>{dataOrder.order.number}</h3>
                 <p className={`text text_type_main-medium`}>идентификатор заказа</p>
                 <div className={`${style.ikonContainer} pt-15 pb-15`}>
                     <div className={`${style.ikonOrderGroup} ${style.ikonOrderCheck}`} >
@@ -29,7 +29,14 @@ const OrderDetails = ({ isOpenModal, handleClickClose }) => {
 
 OrderDetails.propTypes = {
     isOpenModal: PropTypes.bool.isRequired,
-    handleClickClose: PropTypes.func.isRequired
+    handleClickClose: PropTypes.func.isRequired,
+    dataOrder: PropTypes.shape({
+        name: PropTypes.string,
+        order: PropTypes.shape({
+            number: PropTypes.number
+        }),
+        success: PropTypes.bool
+    })
 };
 
 export default OrderDetails;

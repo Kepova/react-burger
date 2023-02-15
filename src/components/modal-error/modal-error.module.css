@@ -1,0 +1,15 @@
+.errMessage {
+    position: fixed;
+    top: 100px;
+    right: 0;
+    padding: 0 10px 0 15px;
+    min-width: 250px;
+    max-width: 60%;
+    min-height: 50px;
+    border-radius: 8px 0 0 8px;
+    background-color: rgba(242, 242, 243, 1);
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
