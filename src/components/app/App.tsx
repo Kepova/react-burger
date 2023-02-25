@@ -1,37 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { IngredientsContext } from '../../services/ingredients-context';
+import { initialState } from '../redux/reducers/reducer';
+import { configureStore } from '../redux/store';
 import style from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import Main from '../main/main';
-import { getBurgerIngridients } from '../../utils/api';
-import useErrors from '../../hooks/use-errors';
-import ModalError from '../modal-error/modal-error';
+import { Provider } from 'react-redux';
+
+//инициализация redux store
+const store = configureStore(initialState);
 
 function App() {
-  const [dataBurgerIngridients, setDataBurgerIngridients] = useState([]);
-  const [isDataReceived, setIsDataReceived] = useState(false);
-  const { error, handleErrorOpen, handleErrorClose } = useErrors(null);
-
-  // получить данные с ингридиентами
-  useEffect(() => {
-    getBurgerIngridients()
-      .then((dataIngridients) => {
-        setDataBurgerIngridients(dataIngridients.data);
-        setIsDataReceived(true);
-        handleErrorClose();
-      })
-      .catch(err => {
-        handleErrorOpen(err);
-      })
-  }, [])
-
   return (
     <div className={`${style.page}`}>
       <AppHeader />
-      {error && <ModalError openError={error} />}
-      <IngredientsContext.Provider value={dataBurgerIngridients}>
-        {isDataReceived && <Main />}
-      </IngredientsContext.Provider>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     </div>
   );
 }

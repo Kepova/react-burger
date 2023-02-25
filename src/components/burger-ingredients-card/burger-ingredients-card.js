@@ -1,25 +1,31 @@
-import { useState } from 'react';
 import burgerCardStyle from './burger-ingredients-card.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import useEnableModal from '../../hooks/use-enable-modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+
 import PropTypes from 'prop-types';
 import propTypesDataIngridient from '../../utils/prop-types';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { showCurrentIngredient } from '../redux/actions/actions';
+
 function BurgerIngredientsCard({ name, title, dataCards }) {
-    const { handleClickOpen, handleClickClose, isOpenModal } = useEnableModal(false);
-    const [selectedCard, setSelectedCard] = useState({});
+
+    //redux
+    const { dataIngridients, openModalIngredients } = useSelector(store => ({
+        dataIngridients: store.dataIngridients,
+        openModalIngredients: store.openModalIngredients,
+    }));
+    const dispatch = useDispatch();
 
     const openModalClick = (card) => {
-        setSelectedCard(card);
-        handleClickOpen();
+        dispatch(showCurrentIngredient(card));
     };
 
     return (
         <>
             <h2 className={`${burgerCardStyle.card__title} text text_type_main-medium pt-10 pb-6 pl-5`} name={name}>{title}</h2>
             <div className={`${burgerCardStyle.cards__container}`}>
-                {dataCards.map((card) => (
+                {dataIngridients.map((card) => (
                     <div className={`${burgerCardStyle.card__container}`} key={card._id} onClick={() => openModalClick(card)} >
                         <img src={card.image} alt={card.name} className={`pl-4 pr-4`} />
                         <Counter count={1} size="default" extraClass="m-1" />
@@ -32,12 +38,7 @@ function BurgerIngredientsCard({ name, title, dataCards }) {
                     </div>
                 ))}
             </div>
-            {isOpenModal &&
-                <IngredientDetails
-                    ingridient={selectedCard}
-                    handleClickClose={handleClickClose}
-                    isOpenModal={isOpenModal}
-                />}
+            {openModalIngredients && <IngredientDetails />}
         </>
     )
 };

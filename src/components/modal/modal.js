@@ -5,18 +5,27 @@ import ModalOverlay from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './modal.module.css';
 
+import { useDispatch } from 'react-redux';
+import { closeModal } from '../redux/actions/actions';
+
 const modalRoot = document.getElementById('modals');
 
-const Modal = ({ handleClickClose, isOpenModal, title, children }) => {
+const Modal = ({
+    isOpenModal,
+    title,
+    children }) => {
+
+    //redux
+    const dispatch = useDispatch();
 
     const closeModalClick = (e) => {
         e.stopPropagation();
-        handleClickClose();
+        dispatch(closeModal());
     };
 
     const escClick = (e) => {
         if (e.key === "Escape") {
-            handleClickClose();
+            dispatch(closeModal());
         }
     };
 
@@ -56,8 +65,6 @@ const Modal = ({ handleClickClose, isOpenModal, title, children }) => {
 Modal.propTypes = {
     title: PropTypes.string,
     children: PropTypes.element.isRequired,
-    isOpenModal: PropTypes.bool.isRequired,
-    handleClickClose: PropTypes.func.isRequired
 };
 
 export default Modal;
