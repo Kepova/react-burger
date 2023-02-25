@@ -34,19 +34,19 @@ function BurgerIngredients() {
     return (<section className={`${burgerIngridientsStyle.ingredients}`}>
         {getFailed && <ModalError openError={getFailed} />}
         <div className={`${burgerIngridientsStyle.burgerIngridients}`}>
-            <Link to='bun' smooth={true} offset={30} duration={500} containerId="containerLinks">
+            <Link to='bun' smooth={true} offset={30} duration={500} containerId="containerLinks" spy={true} onSetActive={() => setCurrent('bun')}>
                 <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
                     Булки
                 </Tab>
             </Link>
 
-            <Link to="sauce" smooth={true} offset={30} duration={500} containerId="containerLinks">
+            <Link to="sauce" smooth={true} offset={30} duration={500} containerId="containerLinks" spy={true} onSetActive={() => setCurrent('sauce')}>
                 <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
                     Соусы
                 </Tab>
             </Link>
 
-            <Link to="main" smooth={true} offset={30} duration={500} containerId="containerLinks">
+            <Link to="main" smooth={true} offset={30} duration={500} containerId="containerLinks" spy={true} onSetActive={() => setCurrent('main')}>
                 <Tab value="main" active={current === 'main'} onClick={setCurrent}>
                     Начинки
                 </Tab>

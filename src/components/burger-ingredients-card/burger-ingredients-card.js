@@ -11,8 +11,7 @@ import { showCurrentIngredient } from '../redux/actions/actions';
 function BurgerIngredientsCard({ name, title, dataCards }) {
 
     //redux
-    const { dataIngridients, openModalIngredients } = useSelector(store => ({
-        dataIngridients: store.dataIngridients,
+    const { openModalIngredients } = useSelector(store => ({
         openModalIngredients: store.openModalIngredients,
     }));
     const dispatch = useDispatch();
@@ -25,7 +24,7 @@ function BurgerIngredientsCard({ name, title, dataCards }) {
         <>
             <h2 className={`${burgerCardStyle.card__title} text text_type_main-medium pt-10 pb-6 pl-5`} name={name}>{title}</h2>
             <div className={`${burgerCardStyle.cards__container}`}>
-                {dataIngridients.map((card) => (
+                {dataCards.map((card) => (
                     <div className={`${burgerCardStyle.card__container}`} key={card._id} onClick={() => openModalClick(card)} >
                         <img src={card.image} alt={card.name} className={`pl-4 pr-4`} />
                         <Counter count={1} size="default" extraClass="m-1" />
