@@ -8,7 +8,10 @@ import {
     GET_ORDER,
     GET_ORDER_FAILED,
     GET_ORDER_SUCCESS,
-    CLOSE_MODAL
+    CLOSE_MODAL,
+    DRAG_FILLING,
+    DROP_FILLING,
+    DELETE_INGREDIENT
 } from './actionTypes';
 import { getBurgerIngridients, createOrder } from '../../../utils/api';
 
@@ -26,7 +29,7 @@ export function getIngredients() {
                     // Данные успешно получены, вызываем экшен для записи данных в хранилище
                     dispatch({
                         type: GET_INGREDIENTS_SUCCESS,
-                        dataIngridients: res.data
+                        dataIngredients: res.data
                     })
                 } else {
                     // Если ошибка, отправляем экшен об ошибке
@@ -99,4 +102,22 @@ export const showCurrentIngredient = (currentIngredient) => ({
 // закрыть модалку
 export const closeModal = () => ({
     type: CLOSE_MODAL
+});
+
+// перенести начинку
+export const draggedFilling = (ingredient) => ({
+    type: DRAG_FILLING,
+    ingredient: ingredient
+});
+
+// добавить начинку в бургер
+export const dropFilling = (ingredient) => ({
+    type: DROP_FILLING,
+    ingredient: ingredient
+});
+
+//удалить ингредиент из конструктора бургера
+export const deleteIngredient = (ingredientDelete) => ({
+    type: DELETE_INGREDIENT,
+    ingredientDelete: ingredientDelete
 });

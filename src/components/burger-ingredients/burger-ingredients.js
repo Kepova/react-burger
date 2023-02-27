@@ -4,15 +4,15 @@ import { getIngredients } from '../redux/actions/actions';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-scroll';
 import burgerIngridientsStyle from './burger-ingredients.module.css';
-import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card';
+import BurgerIngredientsGroup from '../burger-ingredients-group/burger-ingredients-group';
 import ModalError from '../modal-error/modal-error';
 
 function BurgerIngredients() {
     const [current, setCurrent] = useState('bun');
 
     //redux
-    const { dataIngridients, getRequest, getFailed } = useSelector(store => ({
-        dataIngridients: store.dataIngridients,
+    const { dataIngredients, getRequest, getFailed } = useSelector(store => ({
+        dataIngredients: store.dataIngredients,
         getRequest: store.getIngredientsRequest,
         getFailed: store.getIngredientsFailed
     }));
@@ -24,12 +24,12 @@ function BurgerIngredients() {
     }, [])
 
     const filterIngridients = (typeGroup) => {
-        return dataIngridients.filter(item => item.type === typeGroup);
+        return dataIngredients.filter(item => item.type === typeGroup);
     };
 
-    const filteredIngridientBun = useMemo(() => filterIngridients('bun'), [dataIngridients]);
-    const filteredIngridientSauce = useMemo(() => filterIngridients('sauce'), [dataIngridients]);
-    const filteredIngridientMain = useMemo(() => filterIngridients('main'), [dataIngridients]);
+    const filteredIngridientBun = useMemo(() => filterIngridients('bun'), [dataIngredients]);
+    const filteredIngridientSauce = useMemo(() => filterIngridients('sauce'), [dataIngredients]);
+    const filteredIngridientMain = useMemo(() => filterIngridients('main'), [dataIngredients]);
 
     return (<section className={`${burgerIngridientsStyle.ingredients}`}>
         {getFailed && <ModalError openError={getFailed} />}
@@ -56,9 +56,9 @@ function BurgerIngredients() {
             {getRequest ? <div>Загрузка...</div>
                 :
                 <div className={`${burgerIngridientsStyle.ingredients__list} pb-13 custom-scroll`} id='containerLinks'>
-                    <BurgerIngredientsCard dataCards={filteredIngridientBun} title='Булки' name='bun' />
-                    <BurgerIngredientsCard dataCards={filteredIngridientSauce} title='Соусы' name='sauce' />
-                    <BurgerIngredientsCard dataCards={filteredIngridientMain} title='Начинки' name='main' />
+                    <BurgerIngredientsGroup dataCards={filteredIngridientBun} title='Булки' name='bun' />
+                    <BurgerIngredientsGroup dataCards={filteredIngridientSauce} title='Соусы' name='sauce' />
+                    <BurgerIngredientsGroup dataCards={filteredIngridientMain} title='Начинки' name='main' />
                 </div>}
         </div>
     </section>

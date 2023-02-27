@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   GET_INGREDIENTS,
@@ -9,11 +10,14 @@ import {
   GET_ORDER,
   GET_ORDER_FAILED,
   GET_ORDER_SUCCESS,
-  CLOSE_MODAL
+  CLOSE_MODAL,
+  DRAG_FILLING,
+  DROP_FILLING,
+  DELETE_INGREDIENT
 } from '../actions/actionTypes';
 
 export const initialState = {
-  dataIngridients: [],
+  dataIngredients: [],
   dataCurrentBurger: [],
   currentIngredient: {},
   dataOrder: {},
@@ -41,7 +45,7 @@ export function baseReducer(state = initialState, action) {
       return {
         ...state,
         // Запрос выполнился успешно
-        dataIngridients: action.dataIngridients,
+        dataIngredients: action.dataIngredients.map(obj => ({ ...obj, isInOrder: 0 })),
         getIngredientsRequest: false,
       };
     }
@@ -109,6 +113,50 @@ export function baseReducer(state = initialState, action) {
         currentIngredient: {},
         openModalOrder: false,
         openModalIngredients: false
+      }
+    }
+    case DRAG_FILLING: {
+      if (action.ingredient.type === 'bun') {
+        return {
+          ...state,
+          dataIngredients: state.dataIngredients.map((item) =>
+            item._id === action.ingredient._id ?
+              { ...item, isInOrder: item.isInOrder + 2 }
+              : item)
+        }
+      }
+      return {
+        ...state,
+        dataIngredients: state.dataIngredients.map((item) =>
+          item._id === action.ingredient._id ?
+            { ...item, isInOrder: item.isInOrder + 1 }
+            : item)
+      }
+    }
+    case DROP_FILLING: {
+      if (action.ingredient.type === 'bun') {
+        return {
+          ...state,
+          dataCurrentBurger: state.dataCurrentBurger.filter(el => el.type !== 'bun').concat(action.ingredient),
+          dataIngredients: state.dataIngredients.map((item) =>
+          (item.type === 'bun') && (item._id !== action.ingredient._id) ?
+              { ...item, isInOrder: 0 }
+              : item)
+        }
+      }
+      return {
+        ...state,
+        dataCurrentBurger: state.dataCurrentBurger.concat({...action.ingredient, idConstructor: uuidv4()})
+      }
+    }
+    case DELETE_INGREDIENT: {
+      return {
+        ...state,
+        dataCurrentBurger: state.dataCurrentBurger.filter(el => el.idConstructor !== action.ingredientDelete.idConstructor),
+        dataIngredients: state.dataIngredients.map((item) =>
+          item._id === action.ingredientDelete._id ?
+            { ...item, isInOrder: item.isInOrder - 1 }
+            : item)
       }
     }
     default: {
