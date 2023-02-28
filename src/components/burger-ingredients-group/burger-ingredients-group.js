@@ -11,7 +11,7 @@ function BurgerIngredientsGroup({ name, title, dataCards }) {
 
     //redux
     const { openModalIngredients } = useSelector(store => ({
-        openModalIngredients: store.openModalIngredients,
+        openModalIngredients: store.ingredientsReducer.openModalIngredients,
     }));
 
     return (

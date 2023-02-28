@@ -19,11 +19,9 @@ import { getBurgerIngridients, createOrder } from '../../../utils/api';
 //получение ингредиентов
 export function getIngredients() {
     return function (dispatch) {
-
         dispatch({
             type: GET_INGREDIENTS
         })
-
         getBurgerIngridients()
             .then(res => {
                 if (res && res.success) {
@@ -52,11 +50,9 @@ export function getIngredients() {
 //получение инфо о заказе
 export function getInfoOrder(dataIngredient) {
     return function (dispatch) {
-
         dispatch({
             type: GET_ORDER
         })
-
         createOrder(dataIngredient)
             .then(res => {
                 if (res && res.success) {
@@ -105,7 +101,7 @@ export const closeModal = () => ({
     type: CLOSE_MODAL
 });
 
-// // перенести начинку
+// перенести начинку
 export const draggedFilling = (ingredient) => ({
     type: DRAG_FILLING,
     ingredient: ingredient

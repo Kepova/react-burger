@@ -10,8 +10,8 @@ import { useSelector } from 'react-redux';
 const OrderDetails = () => {
     //redux
     const { dataOrder, openModalOrder } = useSelector(store => ({
-        dataOrder: store.dataOrder,
-        openModalOrder: store.openModalOrder
+        dataOrder: store.constructorReducer.dataOrder,
+        openModalOrder: store.constructorReducer.openModalOrder
     }));
 
     return (

@@ -3,12 +3,12 @@ import style from './ingredient-details.module.css';
 
 import { useSelector } from 'react-redux';
 
-const IngredientDetails = ({ isOpenModal, handleClickClose }) => {
+const IngredientDetails = ({ handleClickClose }) => {
 
     //redux
     const { currentIngredient, openModalIngredients } = useSelector(store => ({
-        currentIngredient: store.currentIngredient,
-        openModalIngredients: store.openModalIngredients
+        currentIngredient: store.ingredientsReducer.currentIngredient,
+        openModalIngredients: store.ingredientsReducer.openModalIngredients
     }));
 
     return (

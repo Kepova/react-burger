@@ -29,14 +29,12 @@ function BurgerConstructor() {
     });
 
     //redux
-    const { dataCurrentBurger, bunBurger, totalPrice, getOrderFailed, openModalOrder } = useSelector(store => ({
-        dataCurrentBurger: store.dataCurrentBurger,
-        bunBurger: store.bunBurger,
-        totalPrice: store.totalPrice,
-        getOrderFailed: store.getOrderFailed,
-        openModalOrder: store.openModalOrder
-    }));
-
+    const { dataCurrentBurger,
+        bunBurger,
+        totalPrice,
+        getOrderFailed,
+        openModalOrder
+    } = useSelector(store => store.constructorReducer);
     const dispatch = useDispatch();
 
     // обновить список ингредиентов конструктора

@@ -11,11 +11,10 @@ function BurgerIngredients() {
     const [current, setCurrent] = useState('bun');
 
     //redux
-    const { dataIngredients, getRequest, getFailed } = useSelector(store => ({
-        dataIngredients: store.dataIngredients,
-        getRequest: store.getIngredientsRequest,
-        getFailed: store.getIngredientsFailed
-    }));
+    const { dataIngredients,
+        getRequest,
+        getFailed
+    } = useSelector(store => store.ingredientsReducer);
 
     const dispatch = useDispatch();
 
