@@ -11,3 +11,4 @@ export const CLOSE_MODAL = 'CLOSE_MODAL';
 export const DRAG_FILLING = 'DRAG_FILLING';
 export const DROP_FILLING = 'DROP_FILLING';
 export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
+export const CHANG_PLACE = 'CHANG_PLACE';

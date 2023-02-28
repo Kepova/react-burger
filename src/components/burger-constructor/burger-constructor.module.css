@@ -23,12 +23,6 @@
     inset: 0;
 }
 
-.burgerFilling {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 .burgerFilling:last-child {
     padding-bottom: 0;
 }

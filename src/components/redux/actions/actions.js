@@ -11,7 +11,8 @@ import {
     CLOSE_MODAL,
     DRAG_FILLING,
     DROP_FILLING,
-    DELETE_INGREDIENT
+    DELETE_INGREDIENT,
+    CHANG_PLACE
 } from './actionTypes';
 import { getBurgerIngridients, createOrder } from '../../../utils/api';
 
@@ -82,15 +83,15 @@ export function getInfoOrder(dataIngredient) {
 };
 
 // ингредиенты в конструктор
-export const ingredientsConstructor = (dataConstructor) => ({
+export const ingredientsConstructor = (dataConstructor, dataBun) => ({
     type: INGREDIENTS_CONSTRUCTOR,
-    data: dataConstructor
+    data: dataConstructor,
+    bun: dataBun.dataBun
 });
 
 // подсчет суммы заказа
-export const calculateSummOrder = (dataOrder) => ({
-    type: SUMM_ORDER,
-    data: dataOrder
+export const calculateSummOrder = () => ({
+    type: SUMM_ORDER
 });
 
 // записать текущий ингредиент
@@ -104,7 +105,7 @@ export const closeModal = () => ({
     type: CLOSE_MODAL
 });
 
-// перенести начинку
+// // перенести начинку
 export const draggedFilling = (ingredient) => ({
     type: DRAG_FILLING,
     ingredient: ingredient
@@ -120,4 +121,11 @@ export const dropFilling = (ingredient) => ({
 export const deleteIngredient = (ingredientDelete) => ({
     type: DELETE_INGREDIENT,
     ingredientDelete: ingredientDelete
+});
+
+//поменять местами ингредиенты
+export const changPlaceInConstructor = (dragIndex, hoverIndex) => ({
+    type: CHANG_PLACE,
+    dragIndex: dragIndex,
+    hoverIndex: hoverIndex
 });

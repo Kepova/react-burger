@@ -1,29 +1,37 @@
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor.module.css';
 import OrderDetails from '../order-details/order-details';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import ModalError from '../modal-error/modal-error';
+import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { ingredientsConstructor, calculateSummOrder, getInfoOrder, deleteIngredient } from '../redux/actions/actions';
+import {
+    ingredientsConstructor,
+    calculateSummOrder,
+    getInfoOrder,
+    draggedFilling,
+    dropFilling
+} from '../redux/actions/actions';
 
 import { useDrop } from "react-dnd";
 
 // Компонент BurgerConstructor
-function BurgerConstructor({ onDropHandler }) {
+function BurgerConstructor() {
 
-    // DnD
+    // DnD контейнер
     const [, dropTarget] = useDrop({
         accept: "ingredient",
         drop(item) {
-            onDropHandler(item);
+            dispatch(draggedFilling(item));
+            dispatch(dropFilling(item));;
         },
     });
 
     //redux
-    const { dataIngredients, dataCurrentBurger, totalPrice, getOrderFailed, openModalOrder } = useSelector(store => ({
-        dataIngredients: store.dataIngredients,
+    const { dataCurrentBurger, bunBurger, totalPrice, getOrderFailed, openModalOrder } = useSelector(store => ({
         dataCurrentBurger: store.dataCurrentBurger,
+        bunBurger: store.bunBurger,
         totalPrice: store.totalPrice,
         getOrderFailed: store.getOrderFailed,
         openModalOrder: store.openModalOrder
@@ -33,29 +41,18 @@ function BurgerConstructor({ onDropHandler }) {
 
     // обновить список ингредиентов конструктора
     useEffect(() => {
-        dispatch(ingredientsConstructor(dataCurrentBurger))
-    }, [dataCurrentBurger])
-
-    const fillingBurger = useMemo(() => dataCurrentBurger.filter(item => item.type !== 'bun'), [dataCurrentBurger]);
-    //выбранная булка
-    const bunBurger = useMemo(() => dataCurrentBurger.filter(item => item.type === 'bun')[0], [dataCurrentBurger]);
+        dispatch(ingredientsConstructor(dataCurrentBurger, bunBurger))
+    }, [dispatch])
 
     //подсчет стоимости бургера
     useEffect(() => {
-        if (dataCurrentBurger.length !== 0) {
-            const dataForSum = dataCurrentBurger.map((i) => i.type === 'bun' ? { ...i, price: i.price * 2 } : i);
-            dispatch(calculateSummOrder(dataForSum));
-        }
-    }, [dataCurrentBurger])
+        dispatch(calculateSummOrder());
+    }, [dataCurrentBurger, bunBurger, dispatch])
 
     //оформить заказ
     const clickPlaceOrder = () => {
-        const ingredients = Array.from(fillingBurger, obj => obj._id);
+        const ingredients = Array.from(dataCurrentBurger.concat(bunBurger), obj => obj._id);
         dispatch(getInfoOrder(ingredients));
-    };
-
-    const handleClickDeleteFilling = (cardDelete) => {
-        dispatch(deleteIngredient(cardDelete));
     };
 
     return (
@@ -74,17 +71,14 @@ function BurgerConstructor({ onDropHandler }) {
             </div>
             <div className={`${style.burgerFillingsContainer}`}>
                 <ul className={`${style.burgerFillings} custom-scroll pr-4`}>
-                    {fillingBurger.length > 0 ?
-                        fillingBurger.map((card, i) =>
-                        (<li className={`${style.burgerFilling} pb-4 pr-2`} key={i}>
-                            <DragIcon />
-                            <ConstructorElement
-                                text={card.name}
-                                price={card.price}
-                                thumbnail={card.image}
-                                handleClose={() => handleClickDeleteFilling(card)}
+                    {dataCurrentBurger.length > 0 ?
+                        dataCurrentBurger.map((card, i) =>
+                            <BurgerConstructorItem
+                                card={card}
+                                key={i}
+                                index={i}
                             />
-                        </li>))
+                        )
                         : <p>Добавьте начинку</p>}
                 </ul>
             </div>

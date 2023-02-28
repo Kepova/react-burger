@@ -13,12 +13,14 @@ import {
   CLOSE_MODAL,
   DRAG_FILLING,
   DROP_FILLING,
-  DELETE_INGREDIENT
+  DELETE_INGREDIENT,
+  CHANG_PLACE
 } from '../actions/actionTypes';
 
 export const initialState = {
   dataIngredients: [],
   dataCurrentBurger: [],
+  bunBurger: {},
   currentIngredient: {},
   dataOrder: {},
   getIngredientsFailed: null,
@@ -60,17 +62,19 @@ export function baseReducer(state = initialState, action) {
     case INGREDIENTS_CONSTRUCTOR: {
       return {
         ...state,
-        dataCurrentBurger: action.data
+        dataCurrentBurger: action.data,
+        bunBurger: action.bun
       }
     }
     case SUMM_ORDER: {
-      const currentSumm = action.data.reduce((accumulator, currentObj) => {
+      const summBun = state.bun ? (action.bun.price * 2) : 0;
+      const summFilling = state.dataCurrentBurger.reduce((accumulator, currentObj) => {
         return accumulator + currentObj.price
       }, 0);
 
       return {
         ...state,
-        totalPrice: currentSumm
+        totalPrice: summBun + summFilling
       };
     }
     case CURRENT_INGREDIENT: {
@@ -120,8 +124,8 @@ export function baseReducer(state = initialState, action) {
         return {
           ...state,
           dataIngredients: state.dataIngredients.map((item) =>
-            item._id === action.ingredient._id ?
-              { ...item, isInOrder: item.isInOrder + 2 }
+            (item.type === 'bun') && (item._id !== action.ingredient._id) ?
+              { ...item, isInOrder: 0 }
               : item)
         }
       }
@@ -137,16 +141,16 @@ export function baseReducer(state = initialState, action) {
       if (action.ingredient.type === 'bun') {
         return {
           ...state,
-          dataCurrentBurger: state.dataCurrentBurger.filter(el => el.type !== 'bun').concat(action.ingredient),
+          bunBurger: action.ingredient,
           dataIngredients: state.dataIngredients.map((item) =>
-          (item.type === 'bun') && (item._id !== action.ingredient._id) ?
-              { ...item, isInOrder: 0 }
+            (item._id === action.ingredient._id) ?
+              { ...item, isInOrder: item.isInOrder + 2 }
               : item)
         }
       }
       return {
         ...state,
-        dataCurrentBurger: state.dataCurrentBurger.concat({...action.ingredient, idConstructor: uuidv4()})
+        dataCurrentBurger: state.dataCurrentBurger.concat({ ...action.ingredient, idConstructor: uuidv4() }),
       }
     }
     case DELETE_INGREDIENT: {
@@ -157,6 +161,16 @@ export function baseReducer(state = initialState, action) {
           item._id === action.ingredientDelete._id ?
             { ...item, isInOrder: item.isInOrder - 1 }
             : item)
+      }
+    }
+    case CHANG_PLACE: {
+      const { dragIndex, hoverIndex } = action;
+      const updatedFillings = [...state.dataCurrentBurger];
+      [updatedFillings[dragIndex], updatedFillings[hoverIndex]] = [updatedFillings[hoverIndex], updatedFillings[dragIndex]];
+
+      return {
+        ...state,
+        dataCurrentBurger: updatedFillings
       }
     }
     default: {
