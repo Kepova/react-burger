@@ -4,6 +4,7 @@ import OrderDetails from '../order-details/order-details';
 import { useEffect } from 'react';
 import ModalError from '../modal-error/modal-error';
 import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
+import Modal from '../modal/modal';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -11,8 +12,9 @@ import {
     calculateSummOrder,
     getInfoOrder,
     draggedFilling,
-    dropFilling
-} from '../redux/actions/actions';
+    dropFilling,
+    informAddFilling
+} from '../../redux/actions/actions';
 
 import { useDrop } from "react-dnd";
 
@@ -33,7 +35,8 @@ function BurgerConstructor() {
         bunBurger,
         totalPrice,
         getOrderFailed,
-        openModalOrder
+        openModalOrder,
+        messageAddFilling
     } = useSelector(store => store.constructorReducer);
     const dispatch = useDispatch();
 
@@ -49,15 +52,20 @@ function BurgerConstructor() {
 
     //оформить заказ
     const clickPlaceOrder = () => {
-        const ingredients = Array.from(dataCurrentBurger.concat(bunBurger), obj => obj._id);
-        dispatch(getInfoOrder(ingredients));
+        if ((dataCurrentBurger.length === 0) || !bunBurger._id) {
+            dispatch(informAddFilling());
+        } else {
+            const ingredients = Array.from(dataCurrentBurger.concat(bunBurger), obj => obj._id);
+            dispatch(getInfoOrder(ingredients));
+        }
     };
 
     return (
         <section className={`${style.burgerConstructor} pl-4 pb-13`} ref={dropTarget}>
             {getOrderFailed && <ModalError openError={getOrderFailed} />}
+            {messageAddFilling && <ModalError openError={messageAddFilling} />}
             <div className={`pl-8 pb-4 pr-4`}>
-                {bunBurger ?
+                {bunBurger?._id ?
                     <ConstructorElement type="top"
                         isLocked={true}
                         text={`${bunBurger.name} (верх)`}
@@ -73,15 +81,14 @@ function BurgerConstructor() {
                         dataCurrentBurger.map((card, i) =>
                             <BurgerConstructorItem
                                 card={card}
-                                key={i}
+                                key={card.idConstructor}
                                 index={i}
-                            />
-                        )
+                            />)
                         : <p>Добавьте начинку</p>}
                 </ul>
             </div>
             <div className={`pt-4 pl-8 pr-4`}>
-                {bunBurger ?
+                {bunBurger?._id ?
                     <ConstructorElement
                         type="bottom"
                         isLocked={true}
@@ -104,7 +111,11 @@ function BurgerConstructor() {
                     onClick={clickPlaceOrder}>
                     Оформить заказ
                 </Button>
-                {openModalOrder && <OrderDetails />}
+                {openModalOrder &&
+                    <Modal>
+                        <OrderDetails />
+                    </Modal>
+                }
             </div>
         </section>
     )

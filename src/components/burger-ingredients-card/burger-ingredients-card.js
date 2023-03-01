@@ -1,10 +1,10 @@
 import style from './burger-ingredients-card.module.css';
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import propTypesDataIngridient from '../../utils/prop-types';
+import { propTypesDataIngridients } from '../../utils/prop-types';
 
 import { useDispatch } from 'react-redux';
-import { showCurrentIngredient } from '../redux/actions/actions';
+import { showCurrentIngredient } from '../../redux/actions/actions';
 
 import { useDrag } from "react-dnd";
 
@@ -37,7 +37,7 @@ function BurgerIngredientsCard({ card }) {
 };
 
 BurgerIngredientsCard.propTypes = {
-    card: propTypesDataIngridient.isRequired,
+    card: propTypesDataIngridients.isRequired,
 };
 
 export default BurgerIngredientsCard;

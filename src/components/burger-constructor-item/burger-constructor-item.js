@@ -1,9 +1,11 @@
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor-item.module.css';
 import { useRef } from 'react';
+import PropTypes from 'prop-types';
+import { propTypesDataConstructor } from '../../utils/prop-types';
 
 import { useDispatch } from 'react-redux';
-import { deleteIngredient, changPlaceInConstructor } from '../redux/actions/actions';
+import { deleteIngredient, changPlaceInConstructor } from '../../redux/actions/actions';
 
 import { useDrop, useDrag } from "react-dnd";
 
@@ -67,5 +69,12 @@ function BurgerConstructorItem({ card, index }) {
         </li>
     )
 };
+
+BurgerConstructorItem.propTypes = {
+    card: propTypesDataConstructor.isRequired,
+    index: PropTypes.number.isRequired
+};
+
+
 
 export default BurgerConstructorItem

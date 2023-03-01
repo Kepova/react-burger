@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import {
   INGREDIENTS_CONSTRUCTOR,
   SUMM_ORDER,
@@ -9,7 +7,8 @@ import {
   CLOSE_MODAL,
   DROP_FILLING,
   DELETE_INGREDIENT,
-  CHANG_PLACE
+  CHANG_PLACE,
+  INFORM_ADD_FILLING
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -19,7 +18,8 @@ const initialState = {
   totalPrice: 0,
   getOrderFailed: null,
   getOrderRequest: false,
-  openModalOrder: false
+  openModalOrder: false,
+  messageAddFilling: null
 }
 
 export function constructorReducer(state = initialState, action) {
@@ -57,7 +57,9 @@ export function constructorReducer(state = initialState, action) {
         // Запрос выполнился успешно
         dataOrder: action.data,
         getOrderRequest: false,
-        openModalOrder: true
+        openModalOrder: true,
+        dataCurrentBurger: [],
+        bunBurger: {}
       };
     }
     case GET_ORDER_FAILED: {
@@ -79,12 +81,14 @@ export function constructorReducer(state = initialState, action) {
       if (action.ingredient.type === 'bun') {
         return {
           ...state,
-          bunBurger: action.ingredient
+          bunBurger: action.ingredient,
+          messageAddFilling: null
         }
       }
       return {
         ...state,
-        dataCurrentBurger: state.dataCurrentBurger.concat({ ...action.ingredient, idConstructor: uuidv4() }),
+        dataCurrentBurger: state.dataCurrentBurger.concat(action.ingredient),
+        messageAddFilling: null
       }
     }
     case DELETE_INGREDIENT: {
@@ -101,6 +105,12 @@ export function constructorReducer(state = initialState, action) {
       return {
         ...state,
         dataCurrentBurger: updatedFillings
+      }
+    }
+    case INFORM_ADD_FILLING: {
+      return {
+        ...state,
+        messageAddFilling: 'Добавьте булочку и начинку в бургер'
       }
     }
     default: {

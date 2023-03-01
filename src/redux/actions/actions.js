@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import {
     GET_INGREDIENTS,
     GET_INGREDIENTS_FAILED,
@@ -12,9 +14,10 @@ import {
     DRAG_FILLING,
     DROP_FILLING,
     DELETE_INGREDIENT,
-    CHANG_PLACE
+    CHANG_PLACE,
+    INFORM_ADD_FILLING
 } from './actionTypes';
-import { getBurgerIngridients, createOrder } from '../../../utils/api';
+import { getBurgerIngridients, createOrder } from '../../utils/api';
 
 //получение ингредиентов
 export function getIngredients() {
@@ -82,7 +85,7 @@ export function getInfoOrder(dataIngredient) {
 export const ingredientsConstructor = (dataConstructor, dataBun) => ({
     type: INGREDIENTS_CONSTRUCTOR,
     data: dataConstructor,
-    bun: dataBun.dataBun
+    bun: dataBun
 });
 
 // подсчет суммы заказа
@@ -108,10 +111,13 @@ export const draggedFilling = (ingredient) => ({
 });
 
 // добавить начинку в бургер
-export const dropFilling = (ingredient) => ({
-    type: DROP_FILLING,
-    ingredient: ingredient
-});
+export const dropFilling = (ingredient) => {
+    if (ingredient.type !== 'bun') ingredient = { ...ingredient, idConstructor: uuidv4() };
+    return {
+        type: DROP_FILLING,
+        ingredient: ingredient
+    }
+};
 
 //удалить ингредиент из конструктора бургера
 export const deleteIngredient = (ingredientDelete) => ({
@@ -124,4 +130,9 @@ export const changPlaceInConstructor = (dragIndex, hoverIndex) => ({
     type: CHANG_PLACE,
     dragIndex: dragIndex,
     hoverIndex: hoverIndex
+});
+
+//добавьте ингредиенты в заказ
+export const informAddFilling = () => ({
+    type: INFORM_ADD_FILLING
 });

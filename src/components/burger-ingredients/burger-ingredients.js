@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getIngredients } from '../redux/actions/actions';
+import { getIngredients } from '../../redux/actions/actions';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-scroll';
 import burgerIngridientsStyle from './burger-ingredients.module.css';

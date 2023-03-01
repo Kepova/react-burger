@@ -1,10 +1,10 @@
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-const CheckResponse = (res) => {
+const checkResponse = (res) => {
     if (res.ok) {
         return res.json();
     } else {
-        return Promise.reject(`ошибка: ${res.status}`)
+        return Promise.reject(`Возникла ошибка: ${res.status}`)
     }
 };
 
@@ -15,7 +15,7 @@ export const getBurgerIngridients = () => {
             "Content-Type": "application/json"
         }
     })
-        .then(CheckResponse)
+        .then(checkResponse)
 };
 
 export const createOrder = (ingredients) => {
@@ -27,5 +27,5 @@ export const createOrder = (ingredients) => {
         body:
             JSON.stringify({ "ingredients": ingredients })
     })
-        .then(CheckResponse)
+        .then(checkResponse)
 };
