@@ -1,93 +1,106 @@
-import { ConstructorElement, DragIcon, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import useEnableModal from '../../hooks/use-enable-modal';
+import { ConstructorElement, CurrencyIcon, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor.module.css';
 import OrderDetails from '../order-details/order-details';
-import { useContext, useEffect, useReducer, useMemo, useState } from 'react';
-import { IngredientsContext } from '../../services/ingredients-context';
-import { createOrder } from '../../utils/api';
-import useErrors from '../../hooks/use-errors';
+import { useEffect } from 'react';
 import ModalError from '../modal-error/modal-error';
+import BurgerConstructorItem from '../burger-constructor-item/burger-constructor-item';
+import Modal from '../modal/modal';
 
-const initialState = { totalPrice: 0 };
-function reducer(state, action) {
-    const currentSumm = action.reduce((accumulator, currentObj) => {
-        if (currentObj.type === 'bun') {
-            return accumulator + (currentObj.price * 2)
-        }
-        return accumulator + currentObj.price
-    }, 0);
-    return { totalPrice: currentSumm };
-};
+import { useSelector, useDispatch } from 'react-redux';
+import {
+    ingredientsConstructor,
+    calculateSummOrder,
+    getInfoOrder,
+    draggedFilling,
+    dropFilling,
+    informAddFilling
+} from '../../redux/actions/actions';
+
+import { useDrop } from "react-dnd";
 
 // Компонент BurgerConstructor
 function BurgerConstructor() {
-    const dataBurgerIngridients = useContext(IngredientsContext);
-    const { handleClickOpen, handleClickClose, isOpenModal } = useEnableModal(false);
-    const [dataOrder, setDataOrder] = useState();
-    const { handleErrorOpen, handleErrorClose, error } = useErrors(null);
 
-    const [state, dispatch] = useReducer(reducer, initialState, undefined);
+    // DnD контейнер
+    const [, dropTarget] = useDrop({
+        accept: "ingredient",
+        drop(item) {
+            dispatch(draggedFilling(item));
+            dispatch(dropFilling(item));;
+        },
+    });
 
-    const fillingBurger = useMemo(() => dataBurgerIngridients.filter(item => item.type !== 'bun'), [dataBurgerIngridients]);
-    const bunsBurger = useMemo(() => dataBurgerIngridients.filter(item => item.type === 'bun'), [dataBurgerIngridients]);
+    //redux
+    const { dataCurrentBurger,
+        bunBurger,
+        totalPrice,
+        getOrderFailed,
+        openModalOrder,
+        messageAddFilling
+    } = useSelector(store => store.constructorReducer);
+    const dispatch = useDispatch();
 
-    //выбранная булка
-    const bunBurger = useMemo(() => bunsBurger[Math.floor(Math.random() * bunsBurger.length)], [bunsBurger]);
+    // обновить список ингредиентов конструктора
+    useEffect(() => {
+        dispatch(ingredientsConstructor(dataCurrentBurger, bunBurger))
+    }, [dispatch])
 
     //подсчет стоимости бургера
     useEffect(() => {
-        dispatch(fillingBurger.concat(bunBurger));
-    }, [fillingBurger, bunBurger]);
+        dispatch(calculateSummOrder());
+    }, [dataCurrentBurger, bunBurger, dispatch])
 
     //оформить заказ
     const clickPlaceOrder = () => {
-        const ingredients = Array.from(fillingBurger, obj => obj._id);
-        createOrder(ingredients)
-            .then(res => {
-                handleClickOpen();
-                setDataOrder(res);
-                handleErrorClose();
-            })
-            .catch(err => handleErrorOpen(err))
+        if ((dataCurrentBurger.length === 0) || !bunBurger._id) {
+            dispatch(informAddFilling());
+        } else {
+            const ingredients = Array.from(dataCurrentBurger.concat(bunBurger), obj => obj._id);
+            dispatch(getInfoOrder(ingredients));
+        }
     };
 
     return (
-        <section className={`${style.burgerConstructor} pl-4 pb-13`}>
-            {error && <ModalError openError={error} />}
-            <div className={`${fillingBurger.topBun} pl-8 pb-4 pr-4`}>
-                <ConstructorElement type="top"
-                    isLocked={true}
-                    text={`${bunBurger.name} (верх)`}
-                    price={bunBurger.price}
-                    thumbnail={bunBurger.image}
-                />
+        <section className={`${style.burgerConstructor} pl-4 pb-13`} ref={dropTarget}>
+            {getOrderFailed && <ModalError openError={getOrderFailed} />}
+            {messageAddFilling && <ModalError openError={messageAddFilling} />}
+            <div className={`pl-8 pb-4 pr-4`}>
+                {bunBurger?._id ?
+                    <ConstructorElement type="top"
+                        isLocked={true}
+                        text={`${bunBurger.name} (верх)`}
+                        price={bunBurger.price}
+                        thumbnail={bunBurger.image}
+                    />
+                    : <p>Добавьте булку</p>
+                }
             </div>
             <div className={`${style.burgerFillingsContainer}`}>
                 <ul className={`${style.burgerFillings} custom-scroll pr-4`}>
-                    {fillingBurger.map((card) =>
-                    (<li className={`${style.burgerFilling} pb-4 pr-2`} key={card._id}>
-                        <DragIcon />
-                        <ConstructorElement
-                            text={card.name}
-                            price={card.price}
-                            thumbnail={card.image}
-                        />
-                    </li>)
-                    )}
+                    {dataCurrentBurger.length > 0 ?
+                        dataCurrentBurger.map((card, i) =>
+                            <BurgerConstructorItem
+                                card={card}
+                                key={card.idConstructor}
+                                index={i}
+                            />)
+                        : <p>Добавьте начинку</p>}
                 </ul>
             </div>
             <div className={`pt-4 pl-8 pr-4`}>
-                <ConstructorElement
-                    type="bottom"
-                    isLocked={true}
-                    text={`${bunBurger.name} (низ)`}
-                    price={bunBurger.price}
-                    thumbnail={bunBurger.image}
-                />
+                {bunBurger?._id ?
+                    <ConstructorElement
+                        type="bottom"
+                        isLocked={true}
+                        text={`${bunBurger.name} (низ)`}
+                        price={bunBurger.price}
+                        thumbnail={bunBurger.image}
+                    />
+                    : <p>Добавьте булку</p>}
             </div>
             <div className={`${style.orderInfo} pt-10`}>
                 <p className={`text text_type_digits-medium pr-2`}>
-                    {state.totalPrice}
+                    {totalPrice}
                 </p>
                 <CurrencyIcon type="primary" />
                 <Button
@@ -98,11 +111,11 @@ function BurgerConstructor() {
                     onClick={clickPlaceOrder}>
                     Оформить заказ
                 </Button>
-                {isOpenModal && <OrderDetails
-                    isOpenModal={isOpenModal}
-                    handleClickClose={handleClickClose}
-                    dataOrder={dataOrder}
-                />}
+                {openModalOrder &&
+                    <Modal>
+                        <OrderDetails />
+                    </Modal>
+                }
             </div>
         </section>
     )

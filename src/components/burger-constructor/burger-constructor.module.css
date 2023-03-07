@@ -4,6 +4,7 @@
     justify-content: center;
     justify-self: left;
     position: relative;
+    width: 100%;
 }
 
 .burgerFillingsContainer {
@@ -20,12 +21,6 @@
     flex-grow: 1;
     position: absolute;
     inset: 0;
-}
-
-.burgerFilling {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .burgerFilling:last-child {
