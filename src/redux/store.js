@@ -4,11 +4,11 @@ import thunkMiddleware from 'redux-thunk';
 import { rootReducer } from "./reducers/index";
 
 
-   export const store = createStore(
-        rootReducer,
-        composeWithDevTools(
-            applyMiddleware(
-                thunkMiddleware
-            ))
-    );
+export const store = createStore(
+    rootReducer,
+    composeWithDevTools(
+        applyMiddleware(
+            thunkMiddleware
+        ))
+);
 

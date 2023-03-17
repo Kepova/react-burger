@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://norma.nomoreparties.space/api';
+const BASE_URL = 'https://norma.nomoreparties.space/api';
 
 const checkResponse = (res) => {
     if (res.ok) {
@@ -7,7 +7,7 @@ const checkResponse = (res) => {
         return Promise.reject(`Возникла ошибка: ${res.status}`)
     }
 };
-
+//получить все ингредиенты
 export const getBurgerIngridients = () => {
     return fetch(`${BASE_URL}/ingredients`, {
         method: 'GET',
@@ -17,12 +17,13 @@ export const getBurgerIngridients = () => {
     })
         .then(checkResponse)
 };
-
-export const createOrder = (ingredients) => {
+//оформить заказ
+export const createOrder = (ingredients, token) => {
     return fetch(`${BASE_URL}/orders`, {
         method: 'POST',
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer ' + token
         },
         body:
             JSON.stringify({ "ingredients": ingredients })

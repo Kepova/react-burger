@@ -25,11 +25,8 @@
 
 .header__link {
     text-decoration: none;
-    color: #F2F2F3;
-}
-
-.header__link_active {
-    color: #8585AD;
+    display: flex;
+    align-items: center;
 }
 
 .header__itemProfile {

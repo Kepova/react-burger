@@ -22,16 +22,13 @@ export function ingredientsReducer(state = initialState, action) {
     case GET_INGREDIENTS: {
       return {
         ...state,
-        // Запрос начал выполняться
-        getIngredientsRequest: true,
-        // Сброс статус наличия ошибок от предыдущего запроса 
+        getIngredientsRequest: true, 
         getIngredientsFailed: null,
       };
     }
     case GET_INGREDIENTS_SUCCESS: {
       return {
         ...state,
-        // Запрос выполнился успешно
         dataIngredients: action.dataIngredients.map(obj => ({ ...obj, isInOrder: 0 })),
         getIngredientsRequest: false,
       };
@@ -39,7 +36,6 @@ export function ingredientsReducer(state = initialState, action) {
     case GET_INGREDIENTS_FAILED: {
       return {
         ...state,
-        // Запрос выполнился с ошибкой 
         getIngredientsFailed: action.err,
         getIngredientsRequest: false
       };
@@ -47,15 +43,15 @@ export function ingredientsReducer(state = initialState, action) {
     case CURRENT_INGREDIENT: {
       return {
         ...state,
-        currentIngredient: action.data,
-        openModalIngredients: true
+        currentIngredient: state.dataIngredients.find(el => el._id === action.id),
       }
     }
     case CLOSE_MODAL: {
       return {
         ...state,
         currentIngredient: {},
-        openModalIngredients: false
+        openModalIngredients: false,
+        dataIngredients: state.dataIngredients.map(obj => ({ ...obj, isInOrder: 0 }))
       }
     }
     case DRAG_FILLING: {

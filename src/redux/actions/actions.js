@@ -28,20 +28,17 @@ export function getIngredients() {
         getBurgerIngridients()
             .then(res => {
                 if (res && res.success) {
-                    // Данные успешно получены, вызываем экшен для записи данных в хранилище
                     dispatch({
                         type: GET_INGREDIENTS_SUCCESS,
                         dataIngredients: res.data
                     })
                 } else {
-                    // Если ошибка, отправляем экшен об ошибке
                     dispatch({
                         type: GET_INGREDIENTS_FAILED
                     })
                 }
             })
             .catch(err => {
-                // Если сервер не вернул данных, отправляем экшен об ошибке
                 dispatch({
                     type: GET_INGREDIENTS_FAILED,
                     err: err
@@ -51,28 +48,25 @@ export function getIngredients() {
 };
 
 //получение инфо о заказе
-export function getInfoOrder(dataIngredient) {
+export function getInfoOrder(dataIngredient, token) {
     return function (dispatch) {
         dispatch({
             type: GET_ORDER
         })
-        createOrder(dataIngredient)
+        createOrder(dataIngredient, token)
             .then(res => {
                 if (res && res.success) {
-                    // Данные успешно получены, вызываем экшен для записи данных в хранилище
                     dispatch({
                         type: GET_ORDER_SUCCESS,
                         data: res
                     })
                 } else {
-                    // Если ошибка, отправляем экшен об ошибке
                     dispatch({
                         type: GET_ORDER_FAILED
                     })
                 }
             })
             .catch(err => {
-                // Если сервер не вернул данных, отправляем экшен об ошибке
                 dispatch({
                     type: GET_ORDER_FAILED,
                     err: err
@@ -94,9 +88,9 @@ export const calculateSummOrder = () => ({
 });
 
 // записать текущий ингредиент
-export const showCurrentIngredient = (currentIngredient) => ({
+export const showCurrentIngredient = (IdcurrentIngredient) => ({
     type: CURRENT_INGREDIENT,
-    data: currentIngredient
+    id: IdcurrentIngredient
 });
 
 // закрыть модалку
