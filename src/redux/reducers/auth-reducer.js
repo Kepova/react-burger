@@ -40,9 +40,12 @@ const initialState = {
     loginOutFailed: null,
     loginOutRequest: false,
     getUserFailed: null,
-    getUserRequest: false,
+    getUserRequest: null,
+    getUserSucces: null,
     updateUserFailed: null,
-    updateUserRequest: false
+    updateUserRequest: false,
+    refrechTokenFailed: null,
+    refrechTokenRequest: false
 };
 
 export function authReducer(state = initialState, action) {
@@ -150,7 +153,8 @@ export function authReducer(state = initialState, action) {
                 ...state,
                 dataUser: {},
                 accessToken: null,
-                loginOutRequest: false
+                loginOutRequest: false,
+                getUserSucces: false
             };
         }
         case LOGIN_OUT_FAILED: {
@@ -194,14 +198,16 @@ export function authReducer(state = initialState, action) {
             return {
                 ...state,
                 dataUser: action.dataUser,
-                getUserRequest: false
+                getUserRequest: false,
+                getUserSucces: true
             };
         }
         case GET_USER_FAILED: {
             return {
                 ...state,
                 getUserFailed: action.err,
-                getUserRequest: false
+                getUserRequest: false,
+                getUserSucces: false
             };
         }
         //изменение данных пользователя

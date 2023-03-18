@@ -12,11 +12,8 @@ const IngredientDetails = () => {
         dispatch(showCurrentIngredient(id));
     }, [id, dispatch]);
 
-
     //redux
-    const { currentIngredient } = useSelector(store => ({
-        currentIngredient: store.ingredientsReducer.currentIngredient
-    }));
+    const currentIngredient = useSelector(store => store.ingredientsReducer.currentIngredient);
 
     return (
         <div className={`${style.ingridientDetail}`}>

@@ -8,9 +8,7 @@ import { useSelector } from 'react-redux';
 
 const OrderDetails = () => {
     //redux
-    const { dataOrder } = useSelector(store => ({
-        dataOrder: store.constructorReducer.dataOrder,
-    }));
+    const dataOrder = useSelector(store => store.constructorReducer.dataOrder);
 
     return (
         <div className={`${style.orderContainer} pb-15`}>

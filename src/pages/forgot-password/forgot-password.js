@@ -20,11 +20,10 @@ const ForgotPassword = () => {
     };
 
     //redux
-    const { forgotPasswordFailed, isUpdatePassword, accessToken } = useSelector((store) => ({
-        forgotPasswordFailed: store.authReducer.forgotPasswordFailed,
-        isUpdatePassword: store.authReducer.isUpdatePassword,
-        accessToken: store.authReducer.accessToken
-    }));
+    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const forgotPasswordFailed = useSelector(store => store.authReducer.forgotPasswordFailed);
+    const isUpdatePassword = useSelector(store => store.authReducer.isUpdatePassword);
+
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {

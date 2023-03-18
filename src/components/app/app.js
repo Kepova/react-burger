@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../redux/actions/actions';
-import { getDataUser, refrechTokenUser } from '../../redux/actions/actionsAuth';
+import { getDataUser } from '../../redux/actions/actionsAuth';
 import { getCookie } from '../../utils/cookies-auth';
 import style from './app.module.css';
 
@@ -19,6 +19,7 @@ import IngredientDetails from '../../pages/ingredient-details/ingredient-details
 import ProfileOrders from '../../pages/profile-orders/profile-orders';
 import ProtectedRouteElement from '../protected-route-element';
 import Preloader from '../preloader/preloader';
+import PersonalAccount from '../../pages/personal-account/personal-account';
 
 
 function App() {
@@ -26,32 +27,22 @@ function App() {
   const background = location.state && location.state.background;
   const dispatch = useDispatch();
 
-  const { getUserFailed, accessToken, getIngredientsRequest } = useSelector((store) => ({
-    getUserFailed: store.authReducer.getUserFailed,
-    accessToken: store.authReducer.accessToken,
-    getIngredientsRequest: store.ingredientsReducer.getIngredientsRequest
-  }));
+  const getUserSucces = useSelector(store => store.authReducer.getUserSucces);
+  const accessToken = useSelector(store => store.authReducer.accessToken);
+  const getIngredientsRequest = useSelector(store => store.ingredientsReducer.getIngredientsRequest);
 
   //получение всех ингредиентов
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch])
 
-  //получение данных пользователя
-  const token = getCookie('token');
+  //получение данных пользователя 
   useEffect(() => {
+    const token = getCookie('token');
     if (token) {
       dispatch(getDataUser(accessToken));
     }
-  }, [accessToken]);
-
-  //обновление токена
-  useEffect(() => {
-    if (getUserFailed) {
-      dispatch(refrechTokenUser(token));
-    }
-  }, [getUserFailed]);
-
+  }, [dispatch, accessToken]);
 
   return (
     <div className={`${style.page}`}>
@@ -64,8 +55,10 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='/profile' element={<ProtectedRouteElement element={<Profile />} />} />
-          <Route path='/profile/orders' element={<ProtectedRouteElement element={<ProfileOrders />} />} />
+          <Route path='profile' element={getUserSucces ? <ProtectedRouteElement element={<PersonalAccount />} /> : <Preloader />}>
+            <Route path='' element={<Profile />} />
+            <Route path='orders' element={<ProfileOrders />} />
+          </Route>
           {background ?
             <Route
               path='/ingredients/:id'

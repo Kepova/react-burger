@@ -1,11 +1,15 @@
 import { Navigate } from "react-router-dom";
-import { getCookie } from "../utils/cookies-auth";
+import { useSelector } from "react-redux";
+import PropTypes from 'prop-types';
 
 const ProtectedRouteElement = ({ element }) => {
+    const dataUser = useSelector(store => store.authReducer.dataUser);
 
-    const token = getCookie('token');
+    return dataUser?.name ? element : <Navigate to="/login" replace />;
+};
 
-    return token ? element : <Navigate to="/login" replace />;
+ProtectedRouteElement.propTypes = {
+    element: PropTypes.element.isRequired
 };
 
 export default ProtectedRouteElement;

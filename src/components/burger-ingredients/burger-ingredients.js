@@ -10,10 +10,9 @@ function BurgerIngredients() {
     const [current, setCurrent] = useState('bun');
 
     //redux
-    const { dataIngredients,
-        getIngredientsRequest,
-        getIngredientsFailed
-    } = useSelector(store => store.ingredientsReducer);
+    const dataIngredients = useSelector(store => store.ingredientsReducer.dataIngredients);
+    const getIngredientsRequest = useSelector(store => store.ingredientsReducer.getIngredientsRequest);
+    const getIngredientsFailed = useSelector(store => store.ingredientsReducer.getIngredientsFailed);
 
     const filterIngridients = (typeGroup) => {
         return dataIngredients.filter(item => item.type === typeGroup);

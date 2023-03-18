@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import PersonalAccount from "../../components/personal-account/personal-account";
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
 import { useState } from "react";
@@ -21,10 +20,8 @@ const Profile = () => {
     };
 
     //redux
-    const { dataUser, accessToken } = useSelector((store) => ({
-        dataUser: store.authReducer.dataUser,
-        accessToken: store.authReducer.accessToken,
-    }));
+    const dataUser = useSelector(store => store.authReducer.dataUser);
+    const accessToken = useSelector(store => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     //заполнить поля данными пользователя
@@ -68,52 +65,48 @@ const Profile = () => {
         if (userState.userPassword !== '') {
             newDataUser = { ...newDataUser, password: userState.userPassword }
         }
-        console.log(newDataUser)
         dispatch(updateDataUser(newDataUser, accessToken));
     };
 
     return (
-        <PersonalAccount>
-            <>
-                {!dataUser?.name ? <Preloader />
-                    :
-                    <div className={`${styles.inputsContainer}`}>
-                        <div className={`${styles.inputs}`}>
-                            <Input value={userState.userName}
-                                name={'userName'}
-                                type={'text'}
-                                placeholder='Имя'
-                                onChange={e => onChangeUserState(e)} />
-                            <EmailInput value={userState.userEmail}
-                                name={'userEmail'}
-                                placeholder='E-mail'
-                                onChange={e => onChangeUserState(e)} />
-                            <PasswordInput value={userState.userPassword}
-                                name={'userPassword'}
-                                placeholder='Пароль'
-                                onChange={e => onChangeUserState(e)} />
-                        </div>
-                        <Button htmlType="button"
-                            type="secondary"
-                            size="small"
-                            extraClass={`${isChange ? `${styles.buttonHidden}` : `text_type_main-default`}`}
-                            onClick={handleClickCancel}
-                        >
-                            Отменить
-                        </Button>
-                        <Button htmlType="submit"
-                            type="primary"
-                            size="small"
-                            extraClass={`${isChange ? `${styles.buttonHidden}` : `${styles.buttonSave} text_type_main-default ml-2`}`}
-                            onClick={(e) => hendleClickSubmit(e)}
-                        >
-                            Сохранить
-                        </Button>
+        <>
+            {!dataUser?.name ? <Preloader />
+                :
+                <div className={`${styles.inputsContainer}`}>
+                    <div className={`${styles.inputs}`}>
+                        <Input value={userState.userName}
+                            name={'userName'}
+                            type={'text'}
+                            placeholder='Имя'
+                            onChange={e => onChangeUserState(e)} />
+                        <EmailInput value={userState.userEmail}
+                            name={'userEmail'}
+                            placeholder='E-mail'
+                            onChange={e => onChangeUserState(e)} />
+                        <PasswordInput value={userState.userPassword}
+                            name={'userPassword'}
+                            placeholder='Пароль'
+                            onChange={e => onChangeUserState(e)} />
                     </div>
-
-                }
-            </>
-        </PersonalAccount>
+                    <Button htmlType="button"
+                        type="secondary"
+                        size="small"
+                        extraClass={`${isChange ? `${styles.buttonHidden}` : `text_type_main-default`}`}
+                        onClick={handleClickCancel}
+                    >
+                        Отменить
+                    </Button>
+                    <Button htmlType="submit"
+                        type="primary"
+                        size="small"
+                        extraClass={`${isChange ? `${styles.buttonHidden}` : `${styles.buttonSave} text_type_main-default ml-2`}`}
+                        onClick={(e) => hendleClickSubmit(e)}
+                    >
+                        Сохранить
+                    </Button>
+                </div>
+            }
+        </>
     )
 };
 

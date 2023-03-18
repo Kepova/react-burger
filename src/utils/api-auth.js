@@ -4,7 +4,7 @@ const checkResponse = (res) => {
     if (res.ok) {
         return res.json();
     } else {
-        return Promise.reject(`Возникла ошибка: ${res.status}`)
+        return Promise.reject(res)
     }
 };
 //зарегистрировать пользователя

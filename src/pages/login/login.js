@@ -22,10 +22,8 @@ const Login = () => {
     const navigate = useNavigate();
 
     //redux
-    const { loginUserFailed, accessToken } = useSelector((store) => ({
-        loginUserFailed: store.authReducer.loginUserFailed,
-        accessToken: store.authReducer.accessToken
-    }));
+    const loginUserFailed = useSelector(store => store.authReducer.loginUserFailed);
+    const accessToken = useSelector(store => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {

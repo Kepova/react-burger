@@ -23,10 +23,8 @@ const Register = () => {
     const navigate = useNavigate();
 
     //redux
-    const { createUserFailed, accessToken } = useSelector((store) => ({
-        createUserFailed: store.authReducer.createUserFailed,
-        accessToken: store.authReducer.accessToken
-    }));
+    const createUserFailed = useSelector(store => store.authReducer.createUserFailed);
+    const accessToken = useSelector(store => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     useEffect(() => {

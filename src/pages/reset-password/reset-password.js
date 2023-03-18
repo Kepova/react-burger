@@ -21,17 +21,14 @@ const ResetPassword = () => {
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
     //redux
-    const { isUpdatePassword, updatePasswordFailed, accessToken } = useSelector((store) => ({
-        isUpdatePassword: store.authReducer.isUpdatePassword,
-        updatePasswordFailed: store.authReducer.updatePasswordFailed,
-        accessToken: store.authReducer.accessToken
-    }));
+    const isUpdatePassword = useSelector(store => store.authReducer.isUpdatePassword);
+    const updatePasswordFailed = useSelector(store => store.authReducer.updatePasswordFailed);
+    const accessToken = useSelector(store => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {
         const { newPassword, recoveryCode } = userState;
-        dispatch(updatePassword(newPassword, recoveryCode));
-        navigate('/login');
+        dispatch(updatePassword(newPassword, recoveryCode, { onSuccess: () => navigate("/login") }));
     };
 
     useEffect(() => {

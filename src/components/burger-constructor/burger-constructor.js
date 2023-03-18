@@ -34,24 +34,14 @@ function BurgerConstructor() {
     });
 
     //redux
-    const { dataCurrentBurger,
-        bunBurger,
-        totalPrice,
-        getOrderFailed,
-        getOrderRequest,
-        openModalOrder,
-        messageAddFilling,
-        accessToken
-    } = useSelector(store => ({
-        dataCurrentBurger: store.constructorReducer.dataCurrentBurger,
-        bunBurger: store.constructorReducer.bunBurger,
-        totalPrice: store.constructorReducer.totalPrice,
-        getOrderFailed: store.constructorReducer.getOrderFailed,
-        getOrderRequest: store.constructorReducer.getOrderRequest,
-        openModalOrder: store.constructorReducer.openModalOrder,
-        messageAddFilling: store.constructorReducer.messageAddFilling,
-        accessToken: store.authReducer.accessToken
-    }));
+    const dataCurrentBurger = useSelector(store => store.constructorReducer.dataCurrentBurger);
+    const bunBurger = useSelector(store => store.constructorReducer.bunBurger);
+    const totalPrice = useSelector(store => store.constructorReducer.totalPrice);
+    const getOrderFailed = useSelector(store => store.constructorReducer.getOrderFailed);
+    const getOrderRequest = useSelector(store => store.constructorReducer.getOrderRequest);
+    const openModalOrder = useSelector(store => store.constructorReducer.openModalOrder);
+    const messageAddFilling = useSelector(store => store.constructorReducer.messageAddFilling);
+    const accessToken = useSelector(store => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     // обновить список ингредиентов конструктора

@@ -34,7 +34,7 @@ import {
     getUser,
     updateUser
 } from '../../utils/api-auth';
-import { setCookie, deleteCookie } from '../../utils/cookies-auth';
+import { setCookie, deleteCookie, getCookie } from '../../utils/cookies-auth';
 
 //регистрация пользователя
 export function createNewUser({ userName, userEmail, userPassword }) {
@@ -63,7 +63,7 @@ export function createNewUser({ userName, userEmail, userPassword }) {
             .catch(err => {
                 dispatch({
                     type: CREATE_USER_FAILED,
-                    err: err
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }
@@ -95,7 +95,7 @@ export function authUser({ userEmail, userPassword }) {
             .catch(err => {
                 dispatch({
                     type: AUTH_USER_FAILED,
-                    err: err
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }
@@ -122,14 +122,14 @@ export function forgotPassword(email) {
             .catch(err => {
                 dispatch({
                     type: FORGOT_PASSWORD_FAILED,
-                    err: err
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }
 };
 
 //сбросить пароль
-export function updatePassword(password, token) {
+export function updatePassword(password, token, props) {
     return function (dispatch) {
         dispatch({
             type: UPDATE_PASSWORD
@@ -140,6 +140,7 @@ export function updatePassword(password, token) {
                     dispatch({
                         type: UPDATE_PASSWORD_SUCCESS
                     })
+                    props.onSuccess();
                 } else {
                     dispatch({
                         type: UPDATE_PASSWORD_FAILED
@@ -149,14 +150,14 @@ export function updatePassword(password, token) {
             .catch(err => {
                 dispatch({
                     type: UPDATE_PASSWORD_FAILED,
-                    err: err
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }
 };
 
 //выход из профиля
-export function loggingOutUser(token) {
+export function loggingOutUser(token, props) {
     return function (dispatch) {
         dispatch({
             type: LOGIN_OUT
@@ -168,6 +169,7 @@ export function loggingOutUser(token) {
                         type: LOGIN_OUT_SUCCESS
                     })
                     deleteCookie('token');
+                    props.onSuccess();
                 } else {
                     dispatch({
                         type: LOGIN_OUT_FAILED
@@ -177,18 +179,19 @@ export function loggingOutUser(token) {
             .catch(err => {
                 dispatch({
                     type: LOGIN_OUT_FAILED,
-                    err: err
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }
 };
 
 //обновление токена
-export function refrechTokenUser(token) {
+export function refrechTokenUser(props) {
     return function (dispatch) {
         dispatch({
             type: REFRECH_TOKEN
         })
+        const token = getCookie('token');
         refrechToken(token)
             .then(res => {
                 if (res && res.success) {
@@ -197,20 +200,39 @@ export function refrechTokenUser(token) {
                         accessToken: res.accessToken.split('Bearer ')[1]
                     })
                     setCookie('token', res.refreshToken, 'max-age=86400; path=/;');
+                    if (props?.reRequest) {
+                        if (props?.reRequest.data) {
+                            dispatch(props.data, props.reRequest(res.accessToken.split('Bearer ')[1]));
+                        }
+                        dispatch(props.reRequest(res.accessToken.split('Bearer ')[1]));
+                    }
                 } else {
                     dispatch({
                         type: REFRECH_TOKEN_FAILED
                     })
                 }
             })
-            .catch(err => {
-                dispatch({
-                    type: REFRECH_TOKEN_FAILED,
-                    err: err
+            .catch(error => {
+                error.json().then((err) => {
+                    if (err.message === 'Token is invalid') {
+                        dispatch(loggingOutUser(token));
+                    } else {
+                        dispatch({
+                            type: REFRECH_TOKEN_FAILED,
+                            err: `Возникла ошибка: ${err.status}`
+                        })
+                    }
                 })
+                    .catch(err => {
+                        dispatch({
+                            type: REFRECH_TOKEN_FAILED,
+                            err: `Возникла ошибка: ${err.status}`
+                        })
+                    })
             })
     }
 };
+
 //получить данные пользователя
 export function getDataUser(token) {
     return function (dispatch) {
@@ -230,11 +252,23 @@ export function getDataUser(token) {
                     })
                 }
             })
-            .catch(err => {
-                dispatch({
-                    type: GET_USER_FAILED,
-                    err: err
+            .catch(res => {
+                res.json().then((err) => {
+                    if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
+                        dispatch(refrechTokenUser({ reRequest: getDataUser }));
+                    } else {
+                        dispatch({
+                            type: GET_USER_FAILED,
+                            err: `Возникла ошибка: ${err.status}`
+                        })
+                    }
                 })
+                    .catch(err => {
+                        dispatch({
+                            type: GET_USER_FAILED,
+                            err: `Возникла ошибка: ${err.status}`
+                        })
+                    })
             })
     }
 };
@@ -258,10 +292,22 @@ export function updateDataUser(newDataUser, token) {
                     })
                 }
             })
+            .catch(res => {
+                res.json().then((err) => {
+                    if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
+                        dispatch(refrechTokenUser({ reRequest: updateDataUser, data: newDataUser }));
+                    } else {
+                        dispatch({
+                            type: UPDATE_USER_FAILED,
+                            err: `Возникла ошибка: ${err.status}`
+                        })
+                    }
+                })
+            })
             .catch(err => {
                 dispatch({
-                    type: UPDATE_USER_FAILED,
-                    err: err
+                    type: GET_USER_FAILED,
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }

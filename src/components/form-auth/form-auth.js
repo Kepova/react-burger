@@ -11,11 +11,11 @@ function FormAuth({ title, nameButton, children, onSubmit }) {
     return (
         <>
             <h2 className={`${styles.title} text text_type_main-medium`}>{title}</h2>
-            <form className={`${styles.form}`}>
+            <form className={`${styles.form}`} onSubmit={(e) => handlerSubmit(e)}>
                 <div className={`${styles.inputs} pt-6 pb-6`}>
                     {children}
                 </div>
-                <Button htmlType="submit" extraClass={`${styles.button}`} onClick={(e) => handlerSubmit(e)} >{nameButton}</Button>
+                <Button htmlType="submit" extraClass={`${styles.button}`} >{nameButton}</Button>
             </form>
         </>
     )

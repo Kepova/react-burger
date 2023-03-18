@@ -18,9 +18,7 @@ const Modal = ({
 
     //redux
     const dispatch = useDispatch();
-    const { currentIngredient } = useSelector(store => ({
-        currentIngredient: store.ingredientsReducer.currentIngredient
-    }));
+    const currentIngredient = useSelector(store => store.ingredientsReducer.currentIngredient);
 
     const closeModalClick = (e) => {
         e.stopPropagation();
