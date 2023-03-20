@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     margin: 0 auto;
-    width: 100%;
+    max-width: 1280px;
 }
 
 .header__items {
@@ -16,7 +16,7 @@
     margin: 0;
     display: flex;
     justify-content: flex-start;
-    width: 100%;
+    width: 100%; 
 }
 
 .header__item {
@@ -25,15 +25,13 @@
 
 .header__link {
     text-decoration: none;
-    color: #F2F2F3;
-}
-
-.header__link_active {
-    color: #8585AD;
+    display: flex;
+    align-items: center;
 }
 
 .header__itemProfile {
     margin-left: auto;
+    margin-right: 0;
 }
 
 .logo {

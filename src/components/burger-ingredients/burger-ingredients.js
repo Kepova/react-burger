@@ -1,6 +1,5 @@
-import { useMemo, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getIngredients } from '../../redux/actions/actions';
+import { useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-scroll';
 import burgerIngridientsStyle from './burger-ingredients.module.css';
@@ -11,16 +10,9 @@ function BurgerIngredients() {
     const [current, setCurrent] = useState('bun');
 
     //redux
-    const { dataIngredients,
-        getRequest,
-        getFailed
-    } = useSelector(store => store.ingredientsReducer);
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getIngredients());
-    }, [])
+    const dataIngredients = useSelector(store => store.ingredientsReducer.dataIngredients);
+    const getIngredientsRequest = useSelector(store => store.ingredientsReducer.getIngredientsRequest);
+    const getIngredientsFailed = useSelector(store => store.ingredientsReducer.getIngredientsFailed);
 
     const filterIngridients = (typeGroup) => {
         return dataIngredients.filter(item => item.type === typeGroup);
@@ -31,28 +23,34 @@ function BurgerIngredients() {
     const filteredIngridientMain = useMemo(() => filterIngridients('main'), [dataIngredients]);
 
     return (<section className={`${burgerIngridientsStyle.ingredients}`}>
-        {getFailed && <ModalError openError={getFailed} />}
+        {getIngredientsFailed && <ModalError openError={getIngredientsFailed} />}
         <div className={`${burgerIngridientsStyle.burgerIngridients}`}>
-            <Link to='bun' smooth={true} offset={30} duration={500} containerId="containerLinks" spy={true} onSetActive={() => setCurrent('bun')}>
+            <Link to='bun' smooth={true} offset={30} duration={500}
+                containerId="containerLinks" spy={true}
+                onSetActive={() => setCurrent('bun')}>
                 <Tab value="bun" active={current === 'bun'} onClick={setCurrent}>
                     Булки
                 </Tab>
             </Link>
 
-            <Link to="sauce" smooth={true} offset={30} duration={500} containerId="containerLinks" spy={true} onSetActive={() => setCurrent('sauce')}>
+            <Link to="sauce" smooth={true} offset={30} duration={500}
+                containerId="containerLinks" spy={true}
+                onSetActive={() => setCurrent('sauce')}>
                 <Tab value="sauce" active={current === 'sauce'} onClick={setCurrent}>
                     Соусы
                 </Tab>
             </Link>
 
-            <Link to="main" smooth={true} offset={30} duration={500} containerId="containerLinks" spy={true} onSetActive={() => setCurrent('main')}>
+            <Link to="main" smooth={true} offset={30} duration={500}
+                containerId="containerLinks" spy={true}
+                onSetActive={() => setCurrent('main')}>
                 <Tab value="main" active={current === 'main'} onClick={setCurrent}>
                     Начинки
                 </Tab>
             </Link>
         </div>
         <div className={`${burgerIngridientsStyle.ingredients__listContainer}`}>
-            {getRequest ? <div>Загрузка...</div>
+            {getIngredientsRequest ? <div>Загрузка...</div>
                 :
                 <div className={`${burgerIngridientsStyle.ingredients__list} pb-13 custom-scroll`} id='containerLinks'>
                     <BurgerIngredientsGroup dataCards={filteredIngridientBun} title='Булки' name='bun' />

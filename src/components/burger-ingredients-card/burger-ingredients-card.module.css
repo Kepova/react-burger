@@ -1,3 +1,8 @@
+.cardLink {
+text-decoration: none;
+color: #F2F2F3;
+}
+
 .card__container {
     max-width: 272px;
     height: 208px;

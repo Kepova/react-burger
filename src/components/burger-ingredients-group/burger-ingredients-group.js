@@ -1,19 +1,9 @@
 import style from './burger-ingredients-group.module.css';
 import BurgerIngredientsCard from '../burger-ingredients-card/burger-ingredients-card';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import Modal from '../modal/modal';
-
 import PropTypes from 'prop-types';
 import { propTypesDataIngridients } from '../../utils/prop-types';
 
-import { useSelector } from 'react-redux';
-
 function BurgerIngredientsGroup({ name, title, dataCards }) {
-
-    //redux
-    const { openModalIngredients } = useSelector(store => ({
-        openModalIngredients: store.ingredientsReducer.openModalIngredients,
-    }));
 
     return (
         <>
@@ -24,11 +14,6 @@ function BurgerIngredientsGroup({ name, title, dataCards }) {
                 {dataCards.map((card) =>
                     <BurgerIngredientsCard card={card} key={card._id} />)}
             </div>
-            {openModalIngredients &&
-                <Modal title={'Детали ингредиента'}>
-                    <IngredientDetails />
-                </Modal>
-            }
         </>
     )
 };

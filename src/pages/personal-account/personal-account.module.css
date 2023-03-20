@@ -1,0 +1,37 @@
+.container {
+    width: 100%;
+}
+
+.profile {
+    margin: 16vh auto 0;
+    padding-left: 20px;
+    max-width: 1280px;
+    display: flex;
+    justify-content: flex-start;
+    margin-right: auto;
+}
+
+.navContainer {
+    max-width: 320px;
+    text-align: left;
+}
+
+.navList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.link {
+    text-decoration: none;
+    padding: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    color: #8585AD;
+}
+
+.description {
+    margin: 80px 0 0;
+    color: #8585AD;
+}

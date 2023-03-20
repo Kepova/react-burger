@@ -45,16 +45,13 @@ export function constructorReducer(state = initialState, action) {
     case GET_ORDER: {
       return {
         ...state,
-        // // Запрос начал выполняться
-        getOrderRequest: true,
-        // Сбрасываем статус наличия ошибок от предыдущего запроса 
+        getOrderRequest: true, 
         getOrderFailed: null,
       };
     }
     case GET_ORDER_SUCCESS: {
       return {
         ...state,
-        // Запрос выполнился успешно
         dataOrder: action.data,
         getOrderRequest: false,
         openModalOrder: true,
@@ -65,7 +62,6 @@ export function constructorReducer(state = initialState, action) {
     case GET_ORDER_FAILED: {
       return {
         ...state,
-        // Запрос выполнился с ошибкой 
         getOrderFailed: action.err,
         getOrderRequest: false
       };

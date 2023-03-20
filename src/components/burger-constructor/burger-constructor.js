@@ -17,9 +17,12 @@ import {
 } from '../../redux/actions/actions';
 
 import { useDrop } from "react-dnd";
+import { useNavigate } from 'react-router-dom';
+import Preloader from '../preloader/preloader';
 
 // Компонент BurgerConstructor
 function BurgerConstructor() {
+    const navigate = useNavigate();
 
     // DnD контейнер
     const [, dropTarget] = useDrop({
@@ -31,13 +34,14 @@ function BurgerConstructor() {
     });
 
     //redux
-    const { dataCurrentBurger,
-        bunBurger,
-        totalPrice,
-        getOrderFailed,
-        openModalOrder,
-        messageAddFilling
-    } = useSelector(store => store.constructorReducer);
+    const dataCurrentBurger = useSelector(store => store.constructorReducer.dataCurrentBurger);
+    const bunBurger = useSelector(store => store.constructorReducer.bunBurger);
+    const totalPrice = useSelector(store => store.constructorReducer.totalPrice);
+    const getOrderFailed = useSelector(store => store.constructorReducer.getOrderFailed);
+    const getOrderRequest = useSelector(store => store.constructorReducer.getOrderRequest);
+    const openModalOrder = useSelector(store => store.constructorReducer.openModalOrder);
+    const messageAddFilling = useSelector(store => store.constructorReducer.messageAddFilling);
+    const accessToken = useSelector(store => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     // обновить список ингредиентов конструктора
@@ -52,11 +56,14 @@ function BurgerConstructor() {
 
     //оформить заказ
     const clickPlaceOrder = () => {
+        if (accessToken === null) {
+            return navigate('/login')
+        }
         if ((dataCurrentBurger.length === 0) || !bunBurger._id) {
             dispatch(informAddFilling());
         } else {
             const ingredients = Array.from(dataCurrentBurger.concat(bunBurger), obj => obj._id);
-            dispatch(getInfoOrder(ingredients));
+            dispatch(getInfoOrder(ingredients, accessToken));
         }
     };
 
@@ -64,6 +71,7 @@ function BurgerConstructor() {
         <section className={`${style.burgerConstructor} pl-4 pb-13`} ref={dropTarget}>
             {getOrderFailed && <ModalError openError={getOrderFailed} />}
             {messageAddFilling && <ModalError openError={messageAddFilling} />}
+            {getOrderRequest && <Preloader />}
             <div className={`pl-8 pb-4 pr-4`}>
                 {bunBurger?._id ?
                     <ConstructorElement type="top"
