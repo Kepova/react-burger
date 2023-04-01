@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Input, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './register.module.css';
@@ -7,15 +7,21 @@ import FormAuth from "../../components/form-auth/form-auth";
 import { createNewUser } from "../../redux/actions/actionsAuth";
 import { useDispatch, useSelector } from 'react-redux';
 import ModalError from "../../components/modal-error/modal-error";
+import { TOnChange } from '../../services/types';
 
-const Register = () => {
-    const [userState, setUserState] = useState({
+const Register: FC = () => {
+    interface IUserState {
+        userName: string,
+        userEmail: string,
+        userPassword: string,
+    };
+    const [userState, setUserState] = useState<IUserState>({
         userName: '',
         userEmail: '',
         userPassword: ''
     });
 
-    const onChangeUserState = (e) => {
+    const onChangeUserState: TOnChange = (e) => {
         const { name, value } = e.target;
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
@@ -23,8 +29,8 @@ const Register = () => {
     const navigate = useNavigate();
 
     //redux
-    const createUserFailed = useSelector(store => store.authReducer.createUserFailed);
-    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const createUserFailed = useSelector((store: any) => store.authReducer.createUserFailed);
+    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,7 +41,7 @@ const Register = () => {
 
     const handlerSubmit = () => {
         const { userName, userEmail, userPassword } = userState;
-        dispatch(createNewUser({ userName, userEmail, userPassword }));
+        dispatch(createNewUser({ userName, userEmail, userPassword }) as any);
     };
 
     return (

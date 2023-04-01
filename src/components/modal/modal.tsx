@@ -1,36 +1,36 @@
 import { createPortal } from 'react-dom';
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './modal.module.css';
+import { TModal } from '../../services/types';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../../redux/actions/actions';
 
-const modalRoot = document.getElementById('modals');
+const modalRoot = document.getElementById('modals') as HTMLDivElement;
 
-const Modal = ({
+const Modal: FC<TModal> = ({
     title,
     children }) => {
     const navigate = useNavigate();
 
     //redux
     const dispatch = useDispatch();
-    const currentIngredient = useSelector(store => store.ingredientsReducer.currentIngredient);
+    const currentIngredient = useSelector((store: any) => store.ingredientsReducer.currentIngredient);
 
-    const closeModalClick = (e) => {
-        e.stopPropagation();
+    const closeModalClick = () => {
+        // e.stopPropagation();
         dispatch(closeModal());
         if (currentIngredient?._id) {
             navigate(-1);
         }
     };
 
-    const escClick = (e) => {
+    const escClick = (e: KeyboardEvent) => {
         if (e.key === "Escape") {
-            closeModalClick(e);
+            closeModalClick();
         }
     };
 
@@ -61,11 +61,6 @@ const Modal = ({
         </div>,
         modalRoot
     )
-};
-
-Modal.propTypes = {
-    title: PropTypes.string,
-    children: PropTypes.element.isRequired,
 };
 
 export default Modal;

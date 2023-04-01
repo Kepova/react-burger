@@ -45,7 +45,7 @@ export function constructorReducer(state = initialState, action) {
     case GET_ORDER: {
       return {
         ...state,
-        getOrderRequest: true, 
+        getOrderRequest: true,
         getOrderFailed: null,
       };
     }

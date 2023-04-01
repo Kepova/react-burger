@@ -1,27 +1,32 @@
-import { useEffect } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
-import { useState } from "react";
 import { updateDataUser } from "../../redux/actions/actionsAuth";
 import { useDispatch, useSelector } from 'react-redux';
 import Preloader from '../../components/preloader/preloader';
+import { THandlerSubmit, TOnChange } from '../../services/types';
 
-const Profile = () => {
-    const [userState, setUserState] = useState({
+const Profile: FC = () => {
+    interface IUserState {
+        userName: string,
+        userEmail: string,
+        userPassword: string,
+    };
+    const [userState, setUserState] = useState<IUserState>({
         userName: '',
         userEmail: '',
         userPassword: ''
     });
-    const [isChange, setIsChange] = useState(true);
+    const [isChange, setIsChange] = useState<boolean>(true);
 
-    const onChangeUserState = (e) => {
+    const onChangeUserState: TOnChange = (e) => {
         const { name, value } = e.target;
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
 
     //redux
-    const dataUser = useSelector(store => store.authReducer.dataUser);
-    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const dataUser = useSelector((store: any) => store.authReducer.dataUser);
+    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     //заполнить поля данными пользователя
@@ -36,7 +41,7 @@ const Profile = () => {
         }
     }, [dataUser]);
 
-    const handleClickCancel = () => {
+    const handlerClickCancel = () => {
         setDataUser();
         setUserState({ ...userState, userPassword: '' });
     };
@@ -53,9 +58,9 @@ const Profile = () => {
     }, [dataUser, userState]);
 
     //изменить данные пользователя
-    const hendleClickSubmit = (e) => {
+    const handlerClickSubmit: THandlerSubmit = (e) => {
         e.preventDefault();
-        let newDataUser;
+        let newDataUser = {};
         if (userState.userName !== dataUser.name) {
             newDataUser = { ...newDataUser, name: userState.userName }
         }
@@ -65,7 +70,7 @@ const Profile = () => {
         if (userState.userPassword !== '') {
             newDataUser = { ...newDataUser, password: userState.userPassword }
         }
-        dispatch(updateDataUser(newDataUser, accessToken));
+        dispatch(updateDataUser({ newDataUser, token: accessToken }) as any);
     };
 
     return (
@@ -92,7 +97,7 @@ const Profile = () => {
                         type="secondary"
                         size="small"
                         extraClass={`${isChange ? `${styles.buttonHidden}` : `text_type_main-default`}`}
-                        onClick={handleClickCancel}
+                        onClick={handlerClickCancel}
                     >
                         Отменить
                     </Button>
@@ -100,7 +105,7 @@ const Profile = () => {
                         type="primary"
                         size="small"
                         extraClass={`${isChange ? `${styles.buttonHidden}` : `${styles.buttonSave} text_type_main-default ml-2`}`}
-                        onClick={(e) => hendleClickSubmit(e)}
+                        onClick={(e) => handlerClickSubmit(e)}
                     >
                         Сохранить
                     </Button>

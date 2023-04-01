@@ -1,20 +1,24 @@
-import { useEffect } from 'react';
+import { useEffect, useState, FC } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
-import { useState } from "react";
 import FormAuth from "../../components/form-auth/form-auth";
 import ModalError from "../../components/modal-error/modal-error";
 import { authUser } from "../../redux/actions/actionsAuth";
 import { useDispatch, useSelector } from 'react-redux';
+import { TOnChange } from '../../services/types';
 
-const Login = () => {
-    const [userState, setUserState] = useState({
+const Login: FC = () => {
+    interface IUserState {
+        userEmail: string,
+        userPassword: string,
+    };
+    const [userState, setUserState] = useState<IUserState>({
         userEmail: '',
         userPassword: ''
     });
 
-    const onChangeUserState = (e) => {
+    const onChangeUserState: TOnChange = (e) => {
         const { name, value } = e.target;
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
@@ -22,13 +26,13 @@ const Login = () => {
     const navigate = useNavigate();
 
     //redux
-    const loginUserFailed = useSelector(store => store.authReducer.loginUserFailed);
-    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const loginUserFailed = useSelector((store: any) => store.authReducer.loginUserFailed);
+    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {
         const { userEmail, userPassword } = userState;
-        dispatch(authUser({ userEmail, userPassword }));
+        dispatch<any>(authUser({ userEmail, userPassword }));
     };
 
     useEffect(() => {

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { NavLink, useNavigate, Outlet } from "react-router-dom";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './personal-account.module.css';
@@ -5,13 +6,13 @@ import { useDispatch } from "react-redux";
 import { loggingOutUser } from "../../redux/actions/actionsAuth";
 import { getCookie } from "../../utils/cookies-auth";
 
-export function PersonalAccount() {
+const PersonalAccount: FC = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleClickOut = () => {
         const token = getCookie('token');
-        dispatch(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
+        dispatch<any>(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
     };
 
     return (
@@ -22,13 +23,13 @@ export function PersonalAccount() {
                         <li className={`${styles.navItem}`}>
                             <NavLink to="/profile" end
                                 className={`text text_type_main-medium ${styles.link}`}
-                                style={({ isActive }) => { return { color: isActive && '#F2F2F3' } }}
+                                style={({ isActive }) => { return { color: isActive ? '#F2F2F3' : '#8585AD' } }}
                             >
                                 Профиль</NavLink>
                         </li>
                         <li className={`${styles.navItem}`}>
                             <NavLink to="/profile/orders" className={`text text_type_main-medium ${styles.link}`}
-                                style={({ isActive }) => { return { color: isActive && '#F2F2F3' } }}>
+                                style={({ isActive }) => { return { color: isActive ? '#F2F2F3' : '#8585AD' } }}>
                                 История заказов</NavLink>
                         </li>
                         <li className={`${styles.navItem}`}>

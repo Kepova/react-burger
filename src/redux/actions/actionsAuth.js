@@ -129,12 +129,12 @@ export function forgotPassword(email) {
 };
 
 //сбросить пароль
-export function updatePassword(password, token, props) {
+export function updatePassword({ password, token }, props) {
     return function (dispatch) {
         dispatch({
             type: UPDATE_PASSWORD
         })
-        resetPassword(password, token)
+        resetPassword({ password, token })
             .then(res => {
                 if (res && res.success) {
                     dispatch({
@@ -216,12 +216,11 @@ export function refrechTokenUser(props) {
                 error.json().then((err) => {
                     if (err.message === 'Token is invalid') {
                         dispatch(loggingOutUser(token));
-                    } else {
-                        dispatch({
-                            type: REFRECH_TOKEN_FAILED,
-                            err: `Возникла ошибка: ${err.status}`
-                        })
                     }
+                    dispatch({
+                        type: REFRECH_TOKEN_FAILED,
+                        err: `Возникла ошибка: ${err.status}`
+                    })
                 })
                     .catch(err => {
                         dispatch({
@@ -256,12 +255,11 @@ export function getDataUser(token) {
                 res.json().then((err) => {
                     if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
                         dispatch(refrechTokenUser({ reRequest: getDataUser }));
-                    } else {
-                        dispatch({
-                            type: GET_USER_FAILED,
-                            err: `Возникла ошибка: ${err.status}`
-                        })
                     }
+                    dispatch({
+                        type: GET_USER_FAILED,
+                        err: `Возникла ошибка: ${err.status}`
+                    })
                 })
                     .catch(err => {
                         dispatch({
@@ -274,12 +272,12 @@ export function getDataUser(token) {
 };
 
 //изменить данные пользователя
-export function updateDataUser(newDataUser, token) {
+export function updateDataUser({ newDataUser, token }) {
     return function (dispatch) {
         dispatch({
             type: UPDATE_USER
         })
-        updateUser(newDataUser, token)
+        updateUser({ newDataUser, token })
             .then(res => {
                 if (res && res.success) {
                     dispatch({

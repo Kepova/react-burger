@@ -1,6 +1,8 @@
+import { TCreateOrder } from "../services/api-types";
+
 const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res) => {
+const checkResponse = (res: Response) => {
     if (res.ok) {
         return res.json();
     } else {
@@ -18,7 +20,7 @@ export const getBurgerIngridients = () => {
         .then(checkResponse)
 };
 //оформить заказ
-export const createOrder = (ingredients, token) => {
+export const createOrder = ({ ingredients, token }: TCreateOrder) => {
     return fetch(`${BASE_URL}/orders`, {
         method: 'POST',
         headers: {
@@ -26,7 +28,7 @@ export const createOrder = (ingredients, token) => {
             "Authorization": 'Bearer ' + token
         },
         body:
-            JSON.stringify({ "ingredients": ingredients })
+            JSON.stringify({ ingredients })
     })
         .then(checkResponse)
 };

@@ -1,10 +1,10 @@
 import style from './ingredient-details.module.css';
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { showCurrentIngredient } from '../../redux/actions/actions';
 
-const IngredientDetails = () => {
+const IngredientDetails: FC = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
 
@@ -13,7 +13,7 @@ const IngredientDetails = () => {
     }, [id, dispatch]);
 
     //redux
-    const currentIngredient = useSelector(store => store.ingredientsReducer.currentIngredient);
+    const currentIngredient = useSelector((store: any) => store.ingredientsReducer.currentIngredient);
 
     return (
         <div className={`${style.ingridientDetail}`}>

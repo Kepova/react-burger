@@ -1,19 +1,18 @@
 import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor-item.module.css';
-import { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { propTypesDataConstructor } from '../../utils/prop-types';
+import { useRef, FC } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { deleteIngredient, changPlaceInConstructor } from '../../redux/actions/actions';
 
-import { useDrop, useDrag } from "react-dnd";
+import { useDrop, useDrag, XYCoord } from "react-dnd";
+import { TCardConstructorProps, TCardConstructor, TIndex } from '../../services/types';
 
 // Компонент BurgerConstructor
-function BurgerConstructorItem({ card, index }) {
+const BurgerConstructorItem: FC<TCardConstructorProps> = ({ card, index }) => {
 
     // DnD перетаскивание внутри конструктора
-    const dragDropRef = useRef(null);
+    const dragDropRef = useRef<HTMLLIElement>(null);
     const [{ isDragging }, dragRef] = useDrag({
         type: "filling",
         item: { index },
@@ -21,20 +20,20 @@ function BurgerConstructorItem({ card, index }) {
             isDragging: monitor.isDragging(),
         }),
     });
-    const [{ handlerId }, dropRef] = useDrop({
+    const [{ handlerId }, dropRef] = useDrop<{ index: TIndex }, void, { handlerId: unknown }>({
         accept: "filling",
         collect(monitor) {
             return {
-                handlerId: monitor.getHandlerId(),
+                handlerId: monitor.getHandlerId()
             }
         },
         hover(filling, monitor) {
             const dragIndex = filling.index;
             const hoverIndex = index;
-            const hoverBoundingRect = dragDropRef.current?.getBoundingClientRect();
+            const hoverBoundingRect = dragDropRef.current?.getBoundingClientRect() || { bottom: 0, top: 0 };
             const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const clientOffset = monitor.getClientOffset()
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top
+            const clientOffset = monitor.getClientOffset();
+            const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return
             if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return
@@ -51,7 +50,7 @@ function BurgerConstructorItem({ card, index }) {
     const dispatch = useDispatch();
 
     //удаление ингредиента из конструктора
-    const handleClickDeleteFilling = (cardDelete) => {
+    const handleClickDeleteFilling = (cardDelete: TCardConstructor) => {
         dispatch(deleteIngredient(cardDelete));
     };
 
@@ -59,7 +58,7 @@ function BurgerConstructorItem({ card, index }) {
         <li className={`${style.burgerFilling} ${isDragging ? style.fillingDragging : ''} pb-4 pr-2`}
             ref={dragDropRef}
             data-handler-id={handlerId}>
-            <DragIcon />
+            <DragIcon type="primary" />
             <ConstructorElement
                 text={card.name}
                 price={card.price}
@@ -69,12 +68,5 @@ function BurgerConstructorItem({ card, index }) {
         </li>
     )
 };
-
-BurgerConstructorItem.propTypes = {
-    card: propTypesDataConstructor.isRequired,
-    index: PropTypes.number.isRequired
-};
-
-
 
 export default BurgerConstructorItem

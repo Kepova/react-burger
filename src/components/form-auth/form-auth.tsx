@@ -1,9 +1,10 @@
+import { FC } from "react";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './form-auth.module.css';
-import PropTypes from 'prop-types';
+import { TFormAuth, THandlerSubmit } from "../../services/types";
 
-function FormAuth({ title, nameButton, children, onSubmit }) {
-    const handlerSubmit = (e) => {
+const FormAuth: FC<TFormAuth> = ({ title, nameButton, children, onSubmit }) => {
+    const handlerSubmit: THandlerSubmit = (e) => {
         e.preventDefault();
         onSubmit();
     }
@@ -20,12 +21,5 @@ function FormAuth({ title, nameButton, children, onSubmit }) {
         </>
     )
 };
-
-FormAuth.propTypes = {
-    title: PropTypes.string.isRequired,
-    nameButton: PropTypes.string.isRequired,
-    children: PropTypes.element.isRequired,
-    onSubmit: PropTypes.func.isRequired
-}
 
 export default FormAuth;
