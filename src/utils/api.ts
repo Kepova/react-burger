@@ -10,7 +10,7 @@ const checkResponse = (res: Response) => {
     }
 };
 //получить все ингредиенты
-export const getBurgerIngridients = () => {
+export const getBurgerIngredients = () => {
     return fetch(`${BASE_URL}/ingredients`, {
         method: 'GET',
         headers: {

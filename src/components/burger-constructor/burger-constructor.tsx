@@ -9,7 +9,7 @@ import Modal from '../modal/modal';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     ingredientsConstructor,
-    calculateSummOrder,
+    calculateSumOrder,
     getInfoOrder,
     draggedFilling,
     dropFilling,
@@ -52,7 +52,7 @@ const BurgerConstructor: FC = () => {
 
     //подсчет стоимости бургера
     useEffect(() => {
-        dispatch<any>(calculateSummOrder());
+        dispatch<any>(calculateSumOrder());
     }, [dataCurrentBurger, bunBurger, dispatch])
 
     //оформить заказ
@@ -64,7 +64,7 @@ const BurgerConstructor: FC = () => {
             dispatch<any>(informAddFilling());
         } else {
             const ingredients: any = Array.from(dataCurrentBurger.concat(bunBurger), (obj: any): any => obj._id);
-            dispatch<any>(getInfoOrder({ingredients, token: accessToken}));
+            dispatch<any>(getInfoOrder({ ingredients, token: accessToken }));
         }
     };
 
