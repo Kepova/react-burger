@@ -1,6 +1,6 @@
 import {
   INGREDIENTS_CONSTRUCTOR,
-  SUMM_ORDER,
+  SUM_ORDER,
   GET_ORDER,
   GET_ORDER_FAILED,
   GET_ORDER_SUCCESS,
@@ -13,7 +13,7 @@ import {
 
 const initialState = {
   dataCurrentBurger: [],
-  bunBurger: {},
+  bunBurger: null,
   dataOrder: {},
   totalPrice: 0,
   getOrderFailed: null,
@@ -31,21 +31,21 @@ export function constructorReducer(state = initialState, action) {
         bunBurger: action.bun
       }
     }
-    case SUMM_ORDER: {
-      const summBun = state.bun ? (action.bun.price * 2) : 0;
-      const summFilling = state.dataCurrentBurger.reduce((accumulator, currentObj) => {
+    case SUM_ORDER: {
+      const sumBun = state.bunBurger ? (state.bunBurger.price * 2) : 0;
+      const sumFilling = state.dataCurrentBurger.reduce((accumulator, currentObj) => {
         return accumulator + currentObj.price
       }, 0);
 
       return {
         ...state,
-        totalPrice: summBun + summFilling
+        totalPrice: sumBun + sumFilling
       };
     }
     case GET_ORDER: {
       return {
         ...state,
-        getOrderRequest: true, 
+        getOrderRequest: true,
         getOrderFailed: null,
       };
     }

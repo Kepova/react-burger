@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../redux/actions/actions';
 import { getDataUser } from '../../redux/actions/actionsAuth';
-import { getCookie } from '../../utils/cookies-auth';
 import style from './app.module.css';
 
 import AppHeader from '../app-header/app-header';
@@ -20,16 +19,18 @@ import ProfileOrders from '../../pages/profile-orders/profile-orders';
 import ProtectedRouteElement from '../protected-route-element';
 import Preloader from '../preloader/preloader';
 import PersonalAccount from '../../pages/personal-account/personal-account';
+import { LocationState } from '../../services/types';
+import { getCookie } from '../../utils/cookies-auth';
 
-
-function App() {
+const App: FC = () => {
   const location = useLocation();
-  const background = location.state && location.state.background;
-  const dispatch = useDispatch();
+  const background = location.state && (location.state as LocationState)?.background;
+  const dispatch = useDispatch() as any;
 
-  const getUserSucces = useSelector(store => store.authReducer.getUserSucces);
-  const accessToken = useSelector(store => store.authReducer.accessToken);
-  const getIngredientsRequest = useSelector(store => store.ingredientsReducer.getIngredientsRequest);
+  const getUserRequest = useSelector((store: any) => store.authReducer.getUserRequest);
+  const refrechTokenRequest = useSelector((store: any) => store.authReducer.refrechTokenRequest);
+  const accessToken = useSelector((store: any) => store.authReducer.accessToken);
+  const getIngredientsRequest = useSelector((store: any) => store.ingredientsReducer.getIngredientsRequest);
 
   //получение всех ингредиентов
   useEffect(() => {
@@ -55,7 +56,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='profile' element={getUserSucces ? <ProtectedRouteElement element={<PersonalAccount />} /> : <Preloader />}>
+          <Route path='profile' element={(getUserRequest || refrechTokenRequest) ? <Preloader /> : <ProtectedRouteElement element={<PersonalAccount />} />}>
             <Route path='' element={<Profile />} />
             <Route path='orders' element={<ProfileOrders />} />
           </Route>
@@ -73,7 +74,7 @@ function App() {
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       }
-    </div>
+    </div >
   );
 }
 

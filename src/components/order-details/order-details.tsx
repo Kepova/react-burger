@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import ikonOrderFirst from '../../images/order-details-ikon_1.svg';
 import ikonOrderSecond from '../../images/order-details-ikon_2.svg';
 import ikonOrderThird from '../../images/order-details-ikon_3.svg';
@@ -6,9 +7,9 @@ import style from './order-details.module.css';
 
 import { useSelector } from 'react-redux';
 
-const OrderDetails = () => {
+const OrderDetails: FC = () => {
     //redux
-    const dataOrder = useSelector(store => store.constructorReducer.dataOrder);
+    const dataOrder = useSelector((store: any) => store.constructorReducer.dataOrder);
 
     return (
         <div className={`${style.orderContainer} pb-15`}>

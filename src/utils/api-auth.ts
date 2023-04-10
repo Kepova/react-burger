@@ -1,6 +1,8 @@
+import { TCreateUser, TLoginUser, TResetPassword, TUpdateUser } from "../services/api-types";
+
 export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res) => {
+const checkResponse = (res: Response) => {
     if (res.ok) {
         return res.json();
     } else {
@@ -8,7 +10,7 @@ const checkResponse = (res) => {
     }
 };
 //зарегистрировать пользователя
-export const createUser = ({ email, password, name }) => {
+export const createUser = ({ email, password, name }: TCreateUser) => {
     return fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
         headers: {
@@ -24,7 +26,7 @@ export const createUser = ({ email, password, name }) => {
         .then(checkResponse)
 };
 //авторизация
-export const loginUser = ({ email, password }) => {
+export const loginUser = ({ email, password }: TLoginUser) => {
     return fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -39,7 +41,7 @@ export const loginUser = ({ email, password }) => {
         .then(checkResponse)
 };
 //забыли пароль
-export const recoverPassword = (email) => {
+export const recoverPassword = (email: string) => {
     return fetch(`${BASE_URL}/password-reset`, {
         method: 'POST',
         headers: {
@@ -51,7 +53,7 @@ export const recoverPassword = (email) => {
         .then(checkResponse)
 };
 //восстановить пароль
-export const resetPassword = (password, token) => {
+export const resetPassword = ({ password, token }: TResetPassword) => {
     return fetch(`${BASE_URL}/password-reset/reset`, {
         method: 'POST',
         headers: {
@@ -59,14 +61,14 @@ export const resetPassword = (password, token) => {
         },
         body:
             JSON.stringify({
-                "password": password,
-                "token": token
+                password,
+                token
             })
     })
         .then(checkResponse)
 };
 //выход из профиля
-export const loginOut = (token) => {
+export const loginOut = (token: string) => {
     return fetch(`${BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {
@@ -80,7 +82,7 @@ export const loginOut = (token) => {
         .then(checkResponse)
 };
 //обновление токена
-export const refrechToken = (token) => {
+export const refrechToken = (token: string) => {
     return fetch(`${BASE_URL}/auth/token`, {
         method: 'POST',
         headers: {
@@ -94,7 +96,7 @@ export const refrechToken = (token) => {
         .then(checkResponse)
 };
 //получить данные пользователя
-export const getUser = (token) => {
+export const getUser = (token: string) => {
     return fetch(`${BASE_URL}/auth/user`, {
         method: 'GET',
         headers: {
@@ -105,7 +107,7 @@ export const getUser = (token) => {
         .then(checkResponse)
 };
 //изменить данные пользователя 
-export const updateUser = (dataUser, token) => {
+export const updateUser = ({ newDataUser, token }: TUpdateUser) => {
     return fetch(`${BASE_URL}/auth/user`, {
         method: 'PATCH',
         headers: {
@@ -113,7 +115,7 @@ export const updateUser = (dataUser, token) => {
             "Authorization": 'Bearer ' + token
         },
         body:
-            JSON.stringify(dataUser)
+            JSON.stringify(newDataUser)
     })
         .then(checkResponse)
 };

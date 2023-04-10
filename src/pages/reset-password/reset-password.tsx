@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, FC } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Input, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './reset-password.module.css';
@@ -8,27 +8,32 @@ import ModalError from '../../components/modal-error/modal-error';
 
 import { updatePassword } from "../../redux/actions/actionsAuth";
 import { useDispatch, useSelector } from "react-redux";
+import { TOnChange } from '../../services/types';
 
-const ResetPassword = () => {
-    const [userState, setUserState] = useState({
+const ResetPassword: FC = () => {
+    interface IUserState {
+        newPassword: string,
+        recoveryCode: string
+    };
+    const [userState, setUserState] = useState<IUserState>({
         newPassword: '',
         recoveryCode: ''
     });
     const navigate = useNavigate();
 
-    const onChangeUserState = (e) => {
+    const onChangeUserState: TOnChange = (e) => {
         const { name, value } = e.target;
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
     //redux
-    const isUpdatePassword = useSelector(store => store.authReducer.isUpdatePassword);
-    const updatePasswordFailed = useSelector(store => store.authReducer.updatePasswordFailed);
-    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const isUpdatePassword = useSelector((store: any) => store.authReducer.isUpdatePassword);
+    const updatePasswordFailed = useSelector((store: any) => store.authReducer.updatePasswordFailed);
+    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {
         const { newPassword, recoveryCode } = userState;
-        dispatch(updatePassword(newPassword, recoveryCode, { onSuccess: () => navigate("/login") }));
+        dispatch(updatePassword({ password: newPassword, token: recoveryCode }, { onSuccess: () => navigate("/login") }) as any);
     };
 
     useEffect(() => {

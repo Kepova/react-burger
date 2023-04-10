@@ -42,6 +42,7 @@ const initialState = {
     getUserFailed: null,
     getUserRequest: null,
     getUserSucces: null,
+    isAuthChecked: true,
     updateUserFailed: null,
     updateUserRequest: false,
     refrechTokenFailed: null,
@@ -154,7 +155,7 @@ export function authReducer(state = initialState, action) {
                 dataUser: {},
                 accessToken: null,
                 loginOutRequest: false,
-                getUserSucces: false
+                getUserSucces: null
             };
         }
         case LOGIN_OUT_FAILED: {
@@ -191,7 +192,8 @@ export function authReducer(state = initialState, action) {
             return {
                 ...state,
                 getUserRequest: true,
-                getUserFailed: null
+                getUserFailed: null,
+                getUserSucces: false
             };
         }
         case GET_USER_SUCCESS: {

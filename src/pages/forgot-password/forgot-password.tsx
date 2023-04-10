@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './forgot-password.module.css';
@@ -7,27 +7,31 @@ import FormAuth from "../../components/form-auth/form-auth";
 import ModalError from "../../components/modal-error/modal-error";
 import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword } from "../../redux/actions/actionsAuth";
+import { TOnChange } from "../../services/types";
 
-const ForgotPassword = () => {
-    const [userState, setUserState] = useState({
+const ForgotPassword: FC = () => {
+    interface IUserState {
+        userEmail: string,
+    };
+    const [userState, setUserState] = useState<IUserState>({
         userEmail: ''
     });
     const navigate = useNavigate();
 
-    const onChangeUserState = (e) => {
+    const onChangeUserState: TOnChange = (e) => {
         const { name, value } = e.target;
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
 
     //redux
-    const accessToken = useSelector(store => store.authReducer.accessToken);
-    const forgotPasswordFailed = useSelector(store => store.authReducer.forgotPasswordFailed);
-    const isUpdatePassword = useSelector(store => store.authReducer.isUpdatePassword);
+    const accessToken = useSelector<any>(store => store.authReducer.accessToken);
+    const forgotPasswordFailed: string | null = useSelector((store: any) => store.authReducer.forgotPasswordFailed);
+    const isUpdatePassword = useSelector<any>(store => store.authReducer.isUpdatePassword);
 
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {
-        dispatch(forgotPassword(userState.userEmail));
+        dispatch<any>(forgotPassword(userState.userEmail));
     };
 
     useEffect(() => {

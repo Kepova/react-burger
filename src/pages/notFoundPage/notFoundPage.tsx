@@ -1,8 +1,9 @@
+import { FC } from 'react';
 import { useNavigate } from "react-router-dom";
 import styles from './notFoundPage.module.css';
 import ikon from '../../images/not-found-page.png';
 
-function NotFoundPage() {
+const NotFoundPage: FC = () => {
     const navigate = useNavigate();
 
     return (

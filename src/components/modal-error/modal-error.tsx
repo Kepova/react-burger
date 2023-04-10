@@ -1,7 +1,8 @@
+import { FC } from 'react';
 import style from './modal-error.module.css';
-import PropTypes from 'prop-types';
+import { TModalError } from '../../services/types';
 
-const ModalError = ({ openError }) => {
+const ModalError: FC<TModalError> = ({ openError }) => {
     return (
         <>
             {(openError !== null) &&
@@ -11,9 +12,5 @@ const ModalError = ({ openError }) => {
         </>
     )
 };
-
-export const propTypesIngredient = ({
-    openError: PropTypes.bool.isRequired
-})
 
 export default ModalError;

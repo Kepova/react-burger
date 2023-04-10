@@ -5,7 +5,7 @@ import {
     GET_INGREDIENTS_FAILED,
     GET_INGREDIENTS_SUCCESS,
     INGREDIENTS_CONSTRUCTOR,
-    SUMM_ORDER,
+    SUM_ORDER,
     CURRENT_INGREDIENT,
     GET_ORDER,
     GET_ORDER_FAILED,
@@ -17,7 +17,7 @@ import {
     CHANG_PLACE,
     INFORM_ADD_FILLING
 } from './actionTypes';
-import { getBurgerIngridients, createOrder } from '../../utils/api';
+import { getBurgerIngredients, createOrder } from '../../utils/api';
 
 //получение ингредиентов
 export function getIngredients() {
@@ -25,7 +25,7 @@ export function getIngredients() {
         dispatch({
             type: GET_INGREDIENTS
         })
-        getBurgerIngridients()
+        getBurgerIngredients()
             .then(res => {
                 if (res && res.success) {
                     dispatch({
@@ -83,14 +83,14 @@ export const ingredientsConstructor = (dataConstructor, dataBun) => ({
 });
 
 // подсчет суммы заказа
-export const calculateSummOrder = () => ({
-    type: SUMM_ORDER
+export const calculateSumOrder = () => ({
+    type: SUM_ORDER
 });
 
 // записать текущий ингредиент
-export const showCurrentIngredient = (IdcurrentIngredient) => ({
+export const showCurrentIngredient = (IdCurrentIngredient) => ({
     type: CURRENT_INGREDIENT,
-    id: IdcurrentIngredient
+    id: IdCurrentIngredient
 });
 
 // закрыть модалку
