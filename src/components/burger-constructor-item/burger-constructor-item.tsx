@@ -2,11 +2,11 @@ import { ConstructorElement, DragIcon } from '@ya.praktikum/react-developer-burg
 import style from './burger-constructor-item.module.css';
 import { useRef, FC } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch } from '../../redux/types/hooks';
 import { deleteIngredient, changPlaceInConstructor } from '../../redux/actions/actions';
 
 import { useDrop, useDrag, XYCoord } from "react-dnd";
-import { TCardConstructorProps, TCardConstructor, TIndex } from '../../services/types';
+import { TCardConstructorProps, TCardConstructor } from '../../services/types';
 
 // Компонент BurgerConstructor
 const BurgerConstructorItem: FC<TCardConstructorProps> = ({ card, index }) => {
@@ -20,7 +20,7 @@ const BurgerConstructorItem: FC<TCardConstructorProps> = ({ card, index }) => {
             isDragging: monitor.isDragging(),
         }),
     });
-    const [{ handlerId }, dropRef] = useDrop<{ index: TIndex }, void, { handlerId: unknown }>({
+    const [{ handlerId }, dropRef] = useDrop<{ index: number }, void, { handlerId: unknown }>({
         accept: "filling",
         collect(monitor) {
             return {

@@ -19,9 +19,24 @@ import {
 } from './actionTypes';
 import { getBurgerIngredients, createOrder } from '../../utils/api';
 
+import { TCardConstructor, TCardIngredient } from '../../services/types';
+import { AppDispatch, AppThunk } from '../types/index';
+import {
+    TCalculateSumOrder,
+    TChangPlaceInConstructor,
+    TCloseModal,
+    TDeleteIngredient,
+    TDraggedFilling,
+    TDropFilling,
+    TInformAddFilling,
+    TIngredientsConstructor,
+    TShowCurrentIngredient
+} from '../types/actions-types';
+import { TCreateOrder } from '../../services/api-types';
+
 //получение ингредиентов
-export function getIngredients() {
-    return function (dispatch) {
+export const getIngredients: AppThunk = () => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: GET_INGREDIENTS
         })
@@ -48,12 +63,12 @@ export function getIngredients() {
 };
 
 //получение инфо о заказе
-export function getInfoOrder(dataIngredient, token) {
-    return function (dispatch) {
+export const getInfoOrder: AppThunk = ({ ingredients, token }: TCreateOrder) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: GET_ORDER
         })
-        createOrder(dataIngredient, token)
+        createOrder({ ingredients, token })
             .then(res => {
                 if (res && res.success) {
                     dispatch({
@@ -76,57 +91,57 @@ export function getInfoOrder(dataIngredient, token) {
 };
 
 // ингредиенты в конструктор
-export const ingredientsConstructor = (dataConstructor, dataBun) => ({
-    type: INGREDIENTS_CONSTRUCTOR,
-    data: dataConstructor,
-    bun: dataBun
-});
+export const ingredientsConstructor = (dataConstructor: ReadonlyArray<TCardConstructor>,
+    dataBun: null | TCardConstructor): TIngredientsConstructor => ({
+        type: INGREDIENTS_CONSTRUCTOR,
+        data: dataConstructor,
+        bun: dataBun
+    });
 
 // подсчет суммы заказа
-export const calculateSumOrder = () => ({
+export const calculateSumOrder = (): TCalculateSumOrder => ({
     type: SUM_ORDER
 });
 
 // записать текущий ингредиент
-export const showCurrentIngredient = (IdCurrentIngredient) => ({
+export const showCurrentIngredient = (IdCurrentIngredient: string | undefined): TShowCurrentIngredient => ({
     type: CURRENT_INGREDIENT,
     id: IdCurrentIngredient
 });
 
 // закрыть модалку
-export const closeModal = () => ({
+export const closeModal = (): TCloseModal => ({
     type: CLOSE_MODAL
 });
 
 // перенести начинку
-export const draggedFilling = (ingredient) => ({
+export const draggedFilling = (ingredient: TCardIngredient): TDraggedFilling => ({
     type: DRAG_FILLING,
     ingredient: ingredient
 });
 
 // добавить начинку в бургер
-export const dropFilling = (ingredient) => {
-    if (ingredient.type !== 'bun') ingredient = { ...ingredient, idConstructor: uuidv4() };
+export const dropFilling = (newIngredient: TCardIngredient): TDropFilling => {
     return {
         type: DROP_FILLING,
-        ingredient: ingredient
+        ingredient: { ...newIngredient, idConstructor: uuidv4() }
     }
 };
 
 //удалить ингредиент из конструктора бургера
-export const deleteIngredient = (ingredientDelete) => ({
+export const deleteIngredient = (ingredientDelete: TCardConstructor): TDeleteIngredient => ({
     type: DELETE_INGREDIENT,
     ingredientDelete: ingredientDelete
 });
 
 //поменять местами ингредиенты
-export const changPlaceInConstructor = (dragIndex, hoverIndex) => ({
+export const changPlaceInConstructor = (dragIndex: number, hoverIndex: number): TChangPlaceInConstructor => ({
     type: CHANG_PLACE,
     dragIndex: dragIndex,
     hoverIndex: hoverIndex
 });
 
 //добавьте ингредиенты в заказ
-export const informAddFilling = () => ({
+export const informAddFilling = (): TInformAddFilling => ({
     type: INFORM_ADD_FILLING
 });

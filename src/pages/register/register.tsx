@@ -5,7 +5,7 @@ import styles from './register.module.css';
 import { useState } from "react";
 import FormAuth from "../../components/form-auth/form-auth";
 import { createNewUser } from "../../redux/actions/actionsAuth";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import ModalError from "../../components/modal-error/modal-error";
 import { TOnChange } from '../../services/types';
 
@@ -29,8 +29,8 @@ const Register: FC = () => {
     const navigate = useNavigate();
 
     //redux
-    const createUserFailed = useSelector((store: any) => store.authReducer.createUserFailed);
-    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
+    const createUserFailed = useSelector((store) => store.authReducer.createUserFailed);
+    const accessToken = useSelector((store) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     useEffect(() => {

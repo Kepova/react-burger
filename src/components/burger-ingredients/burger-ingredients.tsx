@@ -1,5 +1,5 @@
 import { useMemo, useState, FC } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../redux/types/hooks';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import { Link } from 'react-scroll';
 import styles from './burger-ingredients.module.css';
@@ -11,9 +11,9 @@ const BurgerIngredients: FC = () => {
     const [current, setCurrent] = useState<string>('bun');
 
     //redux
-    const dataIngredients: any = useSelector<any>(store => store.ingredientsReducer.dataIngredients);
-    const getIngredientsRequest = useSelector<any>(store => store.ingredientsReducer.getIngredientsRequest);
-    const getIngredientsFailed: string | null = useSelector((store: any) => store.ingredientsReducer.getIngredientsFailed);
+    const dataIngredients = useSelector(store => store.ingredientsReducer.dataIngredients);
+    const getIngredientsRequest = useSelector(store => store.ingredientsReducer.getIngredientsRequest);
+    const getIngredientsFailed = useSelector((store) => store.ingredientsReducer.getIngredientsFailed);
 
     const filterIngredients = (typeGroup: string): TCardIngredient[] => {
         return dataIngredients.filter((item: TCardIngredient) => item.type === typeGroup);

@@ -14,9 +14,9 @@ import {
     LOGIN_OUT,
     LOGIN_OUT_SUCCESS,
     LOGIN_OUT_FAILED,
-    REFRECH_TOKEN,
-    REFRECH_TOKEN_SUCCESS,
-    REFRECH_TOKEN_FAILED,
+    REFRESH_TOKEN,
+    REFRESH_TOKEN_SUCCESS,
+    REFRESH_TOKEN_FAILED,
     GET_USER,
     GET_USER_SUCCESS,
     GET_USER_FAILED,
@@ -24,9 +24,11 @@ import {
     UPDATE_USER_SUCCESS,
     UPDATE_USER_FAILED
 } from '../actions/actionTypes';
+import { TActionsAuth } from '../types/actions-auth-types';
+import { TAuthState } from '../types/auth-reducer-types';
 
-const initialState = {
-    dataUser: {},
+const initialState: TAuthState = {
+    dataUser: null,
     accessToken: null,
     createUserRequest: false,
     createUserFailed: null,
@@ -41,15 +43,15 @@ const initialState = {
     loginOutRequest: false,
     getUserFailed: null,
     getUserRequest: null,
-    getUserSucces: null,
+    getUserSuccess: null,
     isAuthChecked: true,
     updateUserFailed: null,
     updateUserRequest: false,
-    refrechTokenFailed: null,
-    refrechTokenRequest: false
+    refreshTokenFailed: null,
+    refreshTokenRequest: false
 };
 
-export function authReducer(state = initialState, action) {
+export function authReducer(state = initialState, action: TActionsAuth): TAuthState {
     switch (action.type) {
         //регистрация пользователя
         case CREATE_USER: {
@@ -152,39 +154,39 @@ export function authReducer(state = initialState, action) {
         case LOGIN_OUT_SUCCESS: {
             return {
                 ...state,
-                dataUser: {},
+                dataUser: null,
                 accessToken: null,
                 loginOutRequest: false,
-                getUserSucces: null
+                getUserSuccess: null
             };
         }
         case LOGIN_OUT_FAILED: {
             return {
                 ...state,
-                refrechTokenFailed: action.err,
-                refrechTokenRequest: false
+                refreshTokenFailed: action.err,
+                refreshTokenRequest: false
             };
         }
         //обновление токена
-        case REFRECH_TOKEN: {
+        case REFRESH_TOKEN: {
             return {
                 ...state,
-                refrechTokenRequest: true,
-                refrechTokenFailed: null
+                refreshTokenRequest: true,
+                refreshTokenFailed: null
             };
         }
-        case REFRECH_TOKEN_SUCCESS: {
+        case REFRESH_TOKEN_SUCCESS: {
             return {
                 ...state,
                 accessToken: action.accessToken,
-                refrechTokenRequest: false
+                refreshTokenRequest: false
             };
         }
-        case REFRECH_TOKEN_FAILED: {
+        case REFRESH_TOKEN_FAILED: {
             return {
                 ...state,
-                refrechTokenFailed: action.err,
-                refrechTokenRequest: false
+                refreshTokenFailed: action.err,
+                refreshTokenRequest: false
             };
         }
         //получение данных пользователя
@@ -193,7 +195,7 @@ export function authReducer(state = initialState, action) {
                 ...state,
                 getUserRequest: true,
                 getUserFailed: null,
-                getUserSucces: false
+                getUserSuccess: false
             };
         }
         case GET_USER_SUCCESS: {
@@ -201,7 +203,7 @@ export function authReducer(state = initialState, action) {
                 ...state,
                 dataUser: action.dataUser,
                 getUserRequest: false,
-                getUserSucces: true
+                getUserSuccess: true
             };
         }
         case GET_USER_FAILED: {
@@ -209,7 +211,7 @@ export function authReducer(state = initialState, action) {
                 ...state,
                 getUserFailed: action.err,
                 getUserRequest: false,
-                getUserSucces: false
+                getUserSuccess: false
             };
         }
         //изменение данных пользователя

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { NavLink, useNavigate, Outlet } from "react-router-dom";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './personal-account.module.css';
-import { useDispatch } from "react-redux";
+import { useDispatch } from '../../redux/types/hooks';
 import { loggingOutUser } from "../../redux/actions/actionsAuth";
 import { getCookie } from "../../utils/cookies-auth";
 
@@ -12,7 +12,7 @@ const PersonalAccount: FC = () => {
 
     const handleClickOut = () => {
         const token = getCookie('token');
-        dispatch<any>(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
+        dispatch(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
     };
 
     return (

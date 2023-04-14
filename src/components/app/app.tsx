@@ -1,6 +1,6 @@
 import { useEffect, FC } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { getIngredients } from '../../redux/actions/actions';
 import { getDataUser } from '../../redux/actions/actionsAuth';
 import style from './app.module.css';
@@ -25,12 +25,12 @@ import { getCookie } from '../../utils/cookies-auth';
 const App: FC = () => {
   const location = useLocation();
   const background = location.state && (location.state as LocationState)?.background;
-  const dispatch = useDispatch() as any;
+  const dispatch = useDispatch();
 
-  const getUserRequest = useSelector((store: any) => store.authReducer.getUserRequest);
-  const refrechTokenRequest = useSelector((store: any) => store.authReducer.refrechTokenRequest);
-  const accessToken = useSelector((store: any) => store.authReducer.accessToken);
-  const getIngredientsRequest = useSelector((store: any) => store.ingredientsReducer.getIngredientsRequest);
+  const getUserRequest = useSelector((store) => store.authReducer.getUserRequest);
+  const refreshTokenRequest = useSelector((store) => store.authReducer.refreshTokenRequest);
+  const accessToken = useSelector((store) => store.authReducer.accessToken);
+  const getIngredientsRequest = useSelector((store) => store.ingredientsReducer.getIngredientsRequest);
 
   //получение всех ингредиентов
   useEffect(() => {
@@ -56,7 +56,7 @@ const App: FC = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='profile' element={(getUserRequest || refrechTokenRequest) ? <Preloader /> : <ProtectedRouteElement element={<PersonalAccount />} />}>
+          <Route path='profile' element={(getUserRequest || refreshTokenRequest) ? <Preloader /> : <ProtectedRouteElement element={<PersonalAccount />} />}>
             <Route path='' element={<Profile />} />
             <Route path='orders' element={<ProfileOrders />} />
           </Route>

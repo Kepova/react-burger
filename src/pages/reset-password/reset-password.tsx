@@ -7,7 +7,7 @@ import FormAuth from "../../components/form-auth/form-auth";
 import ModalError from '../../components/modal-error/modal-error';
 
 import { updatePassword } from "../../redux/actions/actionsAuth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { TOnChange } from '../../services/types';
 
 const ResetPassword: FC = () => {
@@ -26,9 +26,9 @@ const ResetPassword: FC = () => {
         setUserState((userState) => ({ ...userState, [name]: value }));
     };
     //redux
-    const isUpdatePassword = useSelector((store: any) => store.authReducer.isUpdatePassword);
-    const updatePasswordFailed = useSelector((store: any) => store.authReducer.updatePasswordFailed);
-    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
+    const isUpdatePassword = useSelector((store) => store.authReducer.isUpdatePassword);
+    const updatePasswordFailed = useSelector((store) => store.authReducer.updatePasswordFailed);
+    const accessToken = useSelector((store) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {

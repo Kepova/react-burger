@@ -6,7 +6,7 @@ import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './modal.module.css';
 import { TModal } from '../../services/types';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { closeModal } from '../../redux/actions/actions';
 
 const modalRoot = document.getElementById('modals') as HTMLDivElement;
@@ -18,10 +18,9 @@ const Modal: FC<TModal> = ({
 
     //redux
     const dispatch = useDispatch();
-    const currentIngredient = useSelector((store: any) => store.ingredientsReducer.currentIngredient);
+    const currentIngredient = useSelector((store) => store.ingredientsReducer.currentIngredient);
 
     const closeModalClick = () => {
-        // e.stopPropagation();
         dispatch(closeModal());
         if (currentIngredient?._id) {
             navigate(-1);

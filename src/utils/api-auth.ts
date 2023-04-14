@@ -82,7 +82,7 @@ export const loginOut = (token: string) => {
         .then(checkResponse)
 };
 //обновление токена
-export const refrechToken = (token: string) => {
+export const refreshToken = (token: string | undefined) => {
     return fetch(`${BASE_URL}/auth/token`, {
         method: 'POST',
         headers: {

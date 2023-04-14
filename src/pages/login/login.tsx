@@ -5,7 +5,7 @@ import styles from './login.module.css';
 import FormAuth from "../../components/form-auth/form-auth";
 import ModalError from "../../components/modal-error/modal-error";
 import { authUser } from "../../redux/actions/actionsAuth";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { TOnChange } from '../../services/types';
 
 const Login: FC = () => {
@@ -26,13 +26,13 @@ const Login: FC = () => {
     const navigate = useNavigate();
 
     //redux
-    const loginUserFailed = useSelector((store: any) => store.authReducer.loginUserFailed);
-    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
+    const loginUserFailed = useSelector((store) => store.authReducer.loginUserFailed);
+    const accessToken = useSelector((store) => store.authReducer.accessToken);
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {
         const { userEmail, userPassword } = userState;
-        dispatch<any>(authUser({ userEmail, userPassword }));
+        dispatch(authUser({ userEmail, userPassword }));
     };
 
     useEffect(() => {

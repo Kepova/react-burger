@@ -5,16 +5,16 @@ import ikonOrderThird from '../../images/order-details-ikon_3.svg';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './order-details.module.css';
 
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../redux/types/hooks';
 
 const OrderDetails: FC = () => {
     //redux
-    const dataOrder = useSelector((store: any) => store.constructorReducer.dataOrder);
+    const dataOrder = useSelector((store) => store.constructorReducer.dataOrder);
 
     return (
         <div className={`${style.orderContainer} pb-15`}>
             <h3 className={`${style.orderTitle} text text_type_digits-large pb-8`}>{
-                (dataOrder.order !== undefined) &&
+                (dataOrder !== null) &&
                 dataOrder.order.number
             }</h3>
             <p className={`text text_type_main-medium`}>идентификатор заказа</p>

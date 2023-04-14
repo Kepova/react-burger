@@ -10,11 +10,13 @@ import {
   CHANG_PLACE,
   INFORM_ADD_FILLING
 } from '../actions/actionTypes';
+import { TActionsConstructor } from '../types/actions-types';
+import { TConstructorState } from '../types/constructor-reducer-types';
 
-const initialState = {
+const initialState: TConstructorState = {
   dataCurrentBurger: [],
   bunBurger: null,
-  dataOrder: {},
+  dataOrder: null,
   totalPrice: 0,
   getOrderFailed: null,
   getOrderRequest: false,
@@ -22,7 +24,7 @@ const initialState = {
   messageAddFilling: null
 }
 
-export function constructorReducer(state = initialState, action) {
+export const constructorReducer = (state = initialState, action: TActionsConstructor): TConstructorState => {
   switch (action.type) {
     case INGREDIENTS_CONSTRUCTOR: {
       return {
@@ -56,7 +58,7 @@ export function constructorReducer(state = initialState, action) {
         getOrderRequest: false,
         openModalOrder: true,
         dataCurrentBurger: [],
-        bunBurger: {}
+        bunBurger: null
       };
     }
     case GET_ORDER_FAILED: {
@@ -69,7 +71,7 @@ export function constructorReducer(state = initialState, action) {
     case CLOSE_MODAL: {
       return {
         ...state,
-        dataOrder: {},
+        dataOrder: null,
         openModalOrder: false
       }
     }
