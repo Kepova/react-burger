@@ -32,3 +32,14 @@ export const createOrder = ({ ingredients, token }: TCreateOrder) => {
     })
         .then(checkResponse)
 };
+
+//получить данные заказа по id
+export const getOrder = (id: number) => {
+    return fetch(`${BASE_URL}/orders/${id}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(checkResponse)
+};

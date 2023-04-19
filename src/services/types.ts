@@ -28,10 +28,6 @@ export type TCardConstructor = TCardIngredient & {
   idConstructor: string
 }
 
-// export type TIndex = {
-//   index: number
-// }
-
 export type TCardConstructorProps = {
   card: TCardConstructor,
   index: number

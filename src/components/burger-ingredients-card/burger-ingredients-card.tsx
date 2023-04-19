@@ -29,7 +29,6 @@ const BurgerIngredientsCard: FC<{ card: TCardIngredient }> = ({ card }) => {
                 </div>
                 <p className={`text text_type_main-default`}>{card.name}</p>
             </div>
-
         </Link>
     )
 };

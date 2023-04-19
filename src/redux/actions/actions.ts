@@ -33,6 +33,7 @@ import {
     TShowCurrentIngredient
 } from '../types/actions-types';
 import { TCreateOrder } from '../../services/api-types';
+import { refreshTokenUser } from './actionsAuth';
 
 //получение ингредиентов
 export const getIngredients: AppThunk = () => {
@@ -82,10 +83,25 @@ export const getInfoOrder: AppThunk = ({ ingredients, token }: TCreateOrder) => 
                 }
             })
             .catch(err => {
-                dispatch({
-                    type: GET_ORDER_FAILED,
-                    err: err
+                // dispatch({
+                //     type: GET_ORDER_FAILED,
+                //     err: err
+                // })
+                err.json().then((err: any) => {
+                    if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
+                        dispatch(refreshTokenUser({ reRequest: getInfoOrder, data: ingredients }));
+                    }
+                    dispatch({
+                        type: GET_ORDER_FAILED,
+                        err: `Возникла ошибка: ${err.status}`
+                    })
                 })
+                    .catch((err: any) => {
+                        dispatch({
+                            type: GET_ORDER_FAILED,
+                            err: `Возникла ошибка: ${err.status}`
+                        })
+                    })
             })
     }
 };

@@ -16,7 +16,7 @@ const initialState: TIngredientsState = {
   getIngredientsFailed: null,
   getIngredientsRequest: false,
   currentIngredient: null,
-  openModalIngredients: false
+  // openModalIngredients: false
 }
 
 export function ingredientsReducer(state = initialState, action: TActionsIngredients): TIngredientsState {
@@ -52,7 +52,7 @@ export function ingredientsReducer(state = initialState, action: TActionsIngredi
       return {
         ...state,
         currentIngredient: null,
-        openModalIngredients: false,
+        // openModalIngredients: false,
         dataIngredients: state.dataIngredients.map(obj => ({ ...obj, isInOrder: 0 }))
       }
     }

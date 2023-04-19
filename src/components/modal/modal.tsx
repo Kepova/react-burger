@@ -19,10 +19,11 @@ const Modal: FC<TModal> = ({
     //redux
     const dispatch = useDispatch();
     const currentIngredient = useSelector((store) => store.ingredientsReducer.currentIngredient);
+    const currentOrder = useSelector(store => store.ordersReducer.currentOrder);
 
     const closeModalClick = () => {
         dispatch(closeModal());
-        if (currentIngredient?._id) {
+        if (currentIngredient?._id || currentOrder?._id) {
             navigate(-1);
         }
     };

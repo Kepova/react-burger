@@ -21,6 +21,8 @@ import Preloader from '../preloader/preloader';
 import PersonalAccount from '../../pages/personal-account/personal-account';
 import { LocationState } from '../../services/types';
 import { getCookie } from '../../utils/cookies-auth';
+import OrdersList from '../../pages/orders-list/orders-list';
+import Order from '../../pages/order/order';
 
 const App: FC = () => {
   const location = useLocation();
@@ -31,6 +33,7 @@ const App: FC = () => {
   const refreshTokenRequest = useSelector((store) => store.authReducer.refreshTokenRequest);
   const accessToken = useSelector((store) => store.authReducer.accessToken);
   const getIngredientsRequest = useSelector((store) => store.ingredientsReducer.getIngredientsRequest);
+  const wsConnected = useSelector(state => state.wsReducer.wsConnected);
 
   //получение всех ингредиентов
   useEffect(() => {
@@ -52,6 +55,7 @@ const App: FC = () => {
         :
         <Routes>
           <Route path='/' element={<Main />} />
+          <Route path='/feed' element={<OrdersList />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
@@ -59,7 +63,23 @@ const App: FC = () => {
           <Route path='profile' element={(getUserRequest || refreshTokenRequest) ? <Preloader /> : <ProtectedRouteElement element={<PersonalAccount />} />}>
             <Route path='' element={<Profile />} />
             <Route path='orders' element={<ProfileOrders />} />
+            {background ? <Route
+              path='/profile/orders/:id'
+              element={
+                <Modal>
+                  <Order wsConnect={wsConnected} />
+                </Modal>}
+            />
+              : <Route path='/profile/orders/:id' element={<Order />} />}
           </Route>
+          {background ? <Route
+            path='/feed/:id'
+            element={
+              <Modal>
+                <Order wsConnect={wsConnected} />
+              </Modal>}
+          />
+            : <Route path='/feed/:id' element={<Order />} />}
           {background ?
             <Route
               path='/ingredients/:id'
