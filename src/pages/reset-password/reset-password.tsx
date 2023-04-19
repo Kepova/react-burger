@@ -33,7 +33,7 @@ const ResetPassword: FC = () => {
 
     const handlerSubmit = () => {
         const { newPassword, recoveryCode } = userState;
-        dispatch(updatePassword({ password: newPassword, token: recoveryCode }, { onSuccess: () => navigate("/login") }) as any);
+        dispatch(updatePassword({ password: newPassword, token: recoveryCode }, { onSuccess: () => navigate("/login") }));
     };
 
     useEffect(() => {

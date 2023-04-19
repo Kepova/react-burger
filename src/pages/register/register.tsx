@@ -41,7 +41,7 @@ const Register: FC = () => {
 
     const handlerSubmit = () => {
         const { userName, userEmail, userPassword } = userState;
-        dispatch(createNewUser({ userName, userEmail, userPassword }) as any);
+        dispatch(createNewUser({ userName, userEmail, userPassword }));
     };
 
     return (

@@ -2,7 +2,7 @@ import { useEffect, FC } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { getIngredients } from '../../redux/actions/actions';
-import { getDataUser } from '../../redux/actions/actionsAuth';
+import { getDataUser, refreshTokenUser } from '../../redux/actions/actionsAuth';
 import style from './app.module.css';
 
 import AppHeader from '../app-header/app-header';
@@ -43,7 +43,10 @@ const App: FC = () => {
   //получение данных пользователя 
   useEffect(() => {
     const token = getCookie('token');
-    if (token) {
+    if (token && !accessToken) {
+      dispatch(refreshTokenUser(token));
+    }
+    if (token && accessToken) {
       dispatch(getDataUser(accessToken));
     }
   }, [dispatch, accessToken]);

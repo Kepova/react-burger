@@ -71,7 +71,7 @@ const Profile: FC = () => {
         if (userState.userPassword !== '') {
             newDataUser = { ...newDataUser, password: userState.userPassword }
         }
-        dispatch(updateDataUser({ newDataUser, token: accessToken }) as any);
+        dispatch(updateDataUser({ newDataUser, token: accessToken }));
     };
 
     return (

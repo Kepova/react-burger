@@ -14,8 +14,11 @@ const OrdersList: FC = () => {
     const wsUrl = 'wss://norma.nomoreparties.space/orders/all';
 
     useEffect(() => {
-        dispatch(wsConnectionStart(wsUrl))
-        return () => dispatch(wsConnectionClosedAction())
+        dispatch(wsConnectionStart(wsUrl));
+        return () => {
+            const clear = async () => dispatch(wsConnectionClosedAction());
+            clear();
+        }
     }, [dispatch]);
 
     useEffect(() => {

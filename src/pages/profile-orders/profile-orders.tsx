@@ -13,8 +13,11 @@ const ProfileOrders: FC = () => {
     const wsUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken}`;
 
     useEffect(() => {
-        dispatch(wsConnectionStart(wsUrl))
-        return () => dispatch(wsConnectionClosedAction())
+        dispatch(wsConnectionStart(wsUrl));
+        return () => {
+            const clear = async () => { dispatch(wsConnectionClosedAction()) }
+            clear();
+        }
     }, []);
 
     useEffect(() => {

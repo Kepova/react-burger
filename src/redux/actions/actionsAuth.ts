@@ -203,7 +203,7 @@ export const refreshTokenUser: AppThunk = (props) => {
                     setCookie('token', res.refreshToken, { maxAge: '86400', path: '/' });
                     if (props?.reRequest) {
                         if (props?.reRequest.data) {
-                            dispatch(props.data, props.reRequest(res.accessToken.split('Bearer ')[1]));
+                            dispatch(props.reRequest(props.data, res.accessToken.split('Bearer ')[1]));
                         }
                         dispatch(props.reRequest(res.accessToken.split('Bearer ')[1]));
                     }

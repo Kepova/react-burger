@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector } from '../redux/types/hooks';
 import { TProtectedRoute } from "../services/types";
 import { getCookie } from '../utils/cookies-auth';
 import Preloader from './preloader/preloader';
 
 const ProtectedRouteElement: FC<TProtectedRoute> = ({ element }) => {
-    const dataUser = useSelector((store: any) => store.authReducer.dataUser);
+    const dataUser = useSelector((store) => store.authReducer.dataUser);
     const token = getCookie('token');
     if (token) { return dataUser?.name ? element : <Preloader /> }
     else {

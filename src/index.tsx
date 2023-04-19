@@ -12,11 +12,13 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <BrowserRouter>
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>
+    {/* ? React.StrictMode делает двойной запрос на рефреш токена,
+  во втором прилетает ошибка "Token is invalid", т.к. токен уже обновился*/}
+    {/* <React.StrictMode>  */}
+    <Provider store={store}>
+      <App />
+    </Provider>
+    {/* </React.StrictMode> */}
   </BrowserRouter>
 );
 
