@@ -2,7 +2,8 @@ import { Location } from 'history';
 import { ChangeEvent, FormEvent } from 'react';
 
 export type LocationState = {
-  background?: Location
+  background?: Location,
+  from?: string
 }
 
 export type TCard = {
@@ -24,17 +25,13 @@ export type TCardIngredient = TCard & {
   isInOrder: number
 }
 
-export type TCardConstructor = TCard & {
+export type TCardConstructor = TCardIngredient & {
   idConstructor: string
-}
-
-export type TIndex = {
-  index: number
 }
 
 export type TCardConstructorProps = {
   card: TCardConstructor,
-  index: TIndex
+  index: number
 }
 
 export type TGroupIngredients = {
@@ -60,7 +57,7 @@ export type TModal = {
 }
 
 export type TModalError = {
-  openError: string | null;
+  openError: string | null | undefined;
 }
 
 export type TModalOverlay = {
@@ -69,4 +66,25 @@ export type TModalOverlay = {
 
 export type TProtectedRoute = {
   element: React.ReactElement;
+}
+
+export type TDataOrder = {
+  success: boolean;
+  name: string;
+  order: {
+    createdAt: string;
+    ingredients: TCardIngredient[];
+    name: string;
+    number: number;
+    owner: {
+      createdAt: string;
+      email: string;
+      name: string;
+      updatedAt: string;
+    }
+    price: number;
+    status: string;
+    _id: string;
+    updatedAt: string;
+  }
 }

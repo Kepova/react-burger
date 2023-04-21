@@ -6,7 +6,7 @@ const checkResponse = (res: Response) => {
     if (res.ok) {
         return res.json();
     } else {
-        return Promise.reject(res)
+        return Promise.reject(res);
     }
 };
 //зарегистрировать пользователя
@@ -82,7 +82,7 @@ export const loginOut = (token: string) => {
         .then(checkResponse)
 };
 //обновление токена
-export const refrechToken = (token: string) => {
+export const refreshToken = (token: string | null) => {
     return fetch(`${BASE_URL}/auth/token`, {
         method: 'POST',
         headers: {

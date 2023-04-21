@@ -1,12 +1,20 @@
 import { FC } from 'react';
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
+import { useSelector } from '../redux/types/hooks';
 import { TProtectedRoute } from "../services/types";
+import { getCookie } from '../utils/cookies-auth';
+import Preloader from './preloader/preloader';
 
 const ProtectedRouteElement: FC<TProtectedRoute> = ({ element }) => {
-    const dataUser = useSelector((store: any) => store.authReducer.dataUser);
-
-    return dataUser?.name ? element : <Navigate to="/login" replace />;
+    const location = useLocation();
+    const dataUser = useSelector((store) => store.authReducer.dataUser);
+    const token = getCookie('accessToken');
+    
+    if (token) {
+        return dataUser?.name ? element : <Preloader /> }
+    else {
+        return <Navigate to="/login" state={{from: location}} />;
+    }
 };
 
 export default ProtectedRouteElement;

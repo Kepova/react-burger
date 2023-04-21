@@ -52,6 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-scroll": "^1.8.6"
+    "@types/react-scroll": "^1.8.6",
+    "@types/uuid": "^9.0.1"
   }
 }

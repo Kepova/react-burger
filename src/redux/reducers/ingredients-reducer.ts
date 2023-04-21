@@ -8,21 +8,23 @@ import {
   DROP_FILLING,
   DELETE_INGREDIENT
 } from '../actions/actionTypes';
+import { TActionsIngredients } from '../types/actions-types';
+import { TIngredientsState } from '../types/ingredients-reducer-types';
 
-const initialState = {
+const initialState: TIngredientsState = {
   dataIngredients: [],
   getIngredientsFailed: null,
   getIngredientsRequest: false,
-  currentIngredient: {},
-  openModalIngredients: false
+  currentIngredient: null,
+  // openModalIngredients: false
 }
 
-export function ingredientsReducer(state = initialState, action) {
+export function ingredientsReducer(state = initialState, action: TActionsIngredients): TIngredientsState {
   switch (action.type) {
     case GET_INGREDIENTS: {
       return {
         ...state,
-        getIngredientsRequest: true, 
+        getIngredientsRequest: true,
         getIngredientsFailed: null,
       };
     }
@@ -49,8 +51,8 @@ export function ingredientsReducer(state = initialState, action) {
     case CLOSE_MODAL: {
       return {
         ...state,
-        currentIngredient: {},
-        openModalIngredients: false,
+        currentIngredient: null,
+        // openModalIngredients: false,
         dataIngredients: state.dataIngredients.map(obj => ({ ...obj, isInOrder: 0 }))
       }
     }

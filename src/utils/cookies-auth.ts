@@ -34,6 +34,7 @@ export function getCookie(name: string) {
 
 export function deleteCookie(name: string) {
     setCookie(name, "", {
-        'max-age': -1
+        'max-age': -1,
+        'path': '/'
     })
 }

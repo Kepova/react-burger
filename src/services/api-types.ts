@@ -1,4 +1,4 @@
-import { TCardIngredient } from "./types";
+import { TCardConstructor } from "./types";
 
 export type TCreateUser = {
     email: string;
@@ -26,6 +26,11 @@ export type TUpdateUser = {
 }
 
 export type TCreateOrder = {
-    ingredients: TCardIngredient[];
+    ingredients: TCardConstructor[];
     token: string
 }
+
+export type TDataUser = {
+    email: string;
+    name: string;
+  }

@@ -1,0 +1,28 @@
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-self: right;
+    position: relative;
+}
+
+.orders {
+    flex-grow: 1;
+}
+
+.ordersOverlay {
+    overflow-y: overlay;
+    box-sizing: border-box;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-right: 20px;
+}
+
+.ordersOverlay::-webkit-scrollbar-track {
+    margin: 0 0 40px 0;
+}

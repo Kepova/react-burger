@@ -1,6 +1,6 @@
 import { useEffect, FC } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { getIngredients } from '../../redux/actions/actions';
 import { getDataUser } from '../../redux/actions/actionsAuth';
 import style from './app.module.css';
@@ -21,16 +21,19 @@ import Preloader from '../preloader/preloader';
 import PersonalAccount from '../../pages/personal-account/personal-account';
 import { LocationState } from '../../services/types';
 import { getCookie } from '../../utils/cookies-auth';
+import OrdersList from '../../pages/orders-list/orders-list';
+import Order from '../../pages/order/order';
 
 const App: FC = () => {
   const location = useLocation();
   const background = location.state && (location.state as LocationState)?.background;
-  const dispatch = useDispatch() as any;
+  const dispatch = useDispatch();
 
-  const getUserRequest = useSelector((store: any) => store.authReducer.getUserRequest);
-  const refrechTokenRequest = useSelector((store: any) => store.authReducer.refrechTokenRequest);
-  const accessToken = useSelector((store: any) => store.authReducer.accessToken);
-  const getIngredientsRequest = useSelector((store: any) => store.ingredientsReducer.getIngredientsRequest);
+  const getUserRequest = useSelector((store) => store.authReducer.getUserRequest);
+  const refreshTokenRequest = useSelector((store) => store.authReducer.refreshTokenRequest);
+  const getIngredientsRequest = useSelector((store) => store.ingredientsReducer.getIngredientsRequest);
+  const wsConnected = useSelector(state => state.wsReducer.wsConnected);
+  const accessToken = getCookie('accessToken');
 
   //получение всех ингредиентов
   useEffect(() => {
@@ -39,8 +42,7 @@ const App: FC = () => {
 
   //получение данных пользователя 
   useEffect(() => {
-    const token = getCookie('token');
-    if (token) {
+    if (accessToken) {
       dispatch(getDataUser(accessToken));
     }
   }, [dispatch, accessToken]);
@@ -52,14 +54,34 @@ const App: FC = () => {
         :
         <Routes>
           <Route path='/' element={<Main />} />
+          <Route path='/feed' element={<OrdersList />} />
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='profile' element={(getUserRequest || refrechTokenRequest) ? <Preloader /> : <ProtectedRouteElement element={<PersonalAccount />} />}>
+          <Route path='profile' element={
+            (getUserRequest || refreshTokenRequest) ? <Preloader />
+              : <ProtectedRouteElement element={<PersonalAccount />} />
+          }>
             <Route path='' element={<Profile />} />
             <Route path='orders' element={<ProfileOrders />} />
+            {background ? <Route
+              path='/profile/orders/:id'
+              element={
+                <Modal>
+                  <Order wsConnect={wsConnected} />
+                </Modal>}
+            />
+              : <Route path='/profile/orders/:id' element={<Order />} />}
           </Route>
+          {background ? <Route
+            path='/feed/:id'
+            element={
+              <Modal>
+                <Order wsConnect={wsConnected} />
+              </Modal>}
+          />
+            : <Route path='/feed/:id' element={<Order />} />}
           {background ?
             <Route
               path='/ingredients/:id'

@@ -6,7 +6,7 @@ const checkResponse = (res: Response) => {
     if (res.ok) {
         return res.json();
     } else {
-        return Promise.reject(`Возникла ошибка: ${res.status}`)
+        return Promise.reject(res);
     }
 };
 //получить все ингредиенты
@@ -29,6 +29,17 @@ export const createOrder = ({ ingredients, token }: TCreateOrder) => {
         },
         body:
             JSON.stringify({ ingredients })
+    })
+        .then(checkResponse)
+};
+
+//получить данные заказа по id
+export const getOrder = (id: number) => {
+    return fetch(`${BASE_URL}/orders/${id}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json"
+        }
     })
         .then(checkResponse)
 };

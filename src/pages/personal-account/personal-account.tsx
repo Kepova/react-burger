@@ -1,18 +1,29 @@
 import { FC } from 'react';
-import { NavLink, useNavigate, Outlet } from "react-router-dom";
+import { NavLink, useNavigate, Outlet, useLocation } from "react-router-dom";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './personal-account.module.css';
-import { useDispatch } from "react-redux";
+import { useDispatch } from '../../redux/types/hooks';
 import { loggingOutUser } from "../../redux/actions/actionsAuth";
-import { getCookie } from "../../utils/cookies-auth";
 
 const PersonalAccount: FC = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const handleClickOut = () => {
-        const token = getCookie('token');
-        dispatch<any>(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
+        const token = localStorage.getItem('token');
+        dispatch(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
+    };
+
+    const descriptionSection = () => {
+        if (location.pathname === '/profile') {
+            return `В этом разделе вы можете
+            изменить свои персональные данные`
+        }
+        if (location.pathname === '/profile/orders') {
+            return `В этом разделе вы можете 
+            просмотреть свою историю заказов`
+        }
     };
 
     return (
@@ -41,8 +52,8 @@ const PersonalAccount: FC = () => {
                             >Выход</Button>
                         </li>
                     </ul>
-                    <p className={`${styles.description} text text_type_main-default`}>В этом разделе вы можете
-                        изменить свои персональные данные
+                    <p className={`${styles.description} text text_type_main-default`}>
+                        {descriptionSection()}
                     </p>
                 </div >
                 <Outlet />

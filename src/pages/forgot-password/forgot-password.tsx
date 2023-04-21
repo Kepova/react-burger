@@ -5,9 +5,10 @@ import styles from './forgot-password.module.css';
 import { useState } from "react";
 import FormAuth from "../../components/form-auth/form-auth";
 import ModalError from "../../components/modal-error/modal-error";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { forgotPassword } from "../../redux/actions/actionsAuth";
 import { TOnChange } from "../../services/types";
+import { getCookie } from "../../utils/cookies-auth";
 
 const ForgotPassword: FC = () => {
     interface IUserState {
@@ -24,18 +25,18 @@ const ForgotPassword: FC = () => {
     };
 
     //redux
-    const accessToken = useSelector<any>(store => store.authReducer.accessToken);
-    const forgotPasswordFailed: string | null = useSelector((store: any) => store.authReducer.forgotPasswordFailed);
-    const isUpdatePassword = useSelector<any>(store => store.authReducer.isUpdatePassword);
+    const accessToken =  getCookie('accessToken');
+    const forgotPasswordFailed = useSelector((store) => store.authReducer.forgotPasswordFailed);
+    const isUpdatePassword = useSelector(store => store.authReducer.isUpdatePassword);
 
     const dispatch = useDispatch();
 
     const handlerSubmit = () => {
-        dispatch<any>(forgotPassword(userState.userEmail));
+        dispatch(forgotPassword(userState.userEmail));
     };
 
     useEffect(() => {
-        if (accessToken !== null) {
+        if (accessToken) {
             navigate('/');
         }
         if (isUpdatePassword !== null) {

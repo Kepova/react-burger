@@ -22,7 +22,7 @@ const AppHeader: FC = () => {
                         </NavLink>
                     </li>
                     <li className={`${styles.header__item} pl-5 pr-5 text text_type_main-default`}>
-                        <NavLink to='/profile/orders'
+                        <NavLink to='/feed'
                             className={`${styles.header__link}`}>
                             {({ isActive }) => (
                                 <>

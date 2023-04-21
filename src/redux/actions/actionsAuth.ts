@@ -14,9 +14,9 @@ import {
     LOGIN_OUT,
     LOGIN_OUT_SUCCESS,
     LOGIN_OUT_FAILED,
-    REFRECH_TOKEN,
-    REFRECH_TOKEN_SUCCESS,
-    REFRECH_TOKEN_FAILED,
+    REFRESH_TOKEN,
+    REFRESH_TOKEN_SUCCESS,
+    REFRESH_TOKEN_FAILED,
     GET_USER,
     GET_USER_SUCCESS,
     GET_USER_FAILED,
@@ -30,15 +30,16 @@ import {
     recoverPassword,
     resetPassword,
     loginOut,
-    refrechToken,
+    refreshToken,
     getUser,
     updateUser
 } from '../../utils/api-auth';
-import { setCookie, deleteCookie, getCookie } from '../../utils/cookies-auth';
+import { setCookie, deleteCookie } from '../../utils/cookies-auth';
+import { AppDispatch, AppThunk } from '../types/index';
 
 //регистрация пользователя
-export function createNewUser({ userName, userEmail, userPassword }) {
-    return function (dispatch) {
+export const createNewUser: AppThunk = ({ userName, userEmail, userPassword }) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: CREATE_USER
         })
@@ -49,11 +50,12 @@ export function createNewUser({ userName, userEmail, userPassword }) {
         })
             .then(res => {
                 if (res && res.success) {
+                    const accessToken = res.accessToken.split('Bearer ')[1];
                     dispatch({
-                        type: CREATE_USER_SUCCESS,
-                        accessToken: res.accessToken.split('Bearer ')[1]
+                        type: CREATE_USER_SUCCESS
                     })
-                    setCookie('token', res.refreshToken, 'max-age=86400; path=/;');
+                    localStorage.setItem('token', res.refreshToken);
+                    setCookie('accessToken', accessToken, { maxAge: '86400', path: '/' });
                 } else {
                     dispatch({
                         type: CREATE_USER_FAILED
@@ -70,8 +72,8 @@ export function createNewUser({ userName, userEmail, userPassword }) {
 };
 
 //авторизация пользователя
-export function authUser({ userEmail, userPassword }) {
-    return function (dispatch) {
+export const authUser: AppThunk = ({ userEmail, userPassword }, props) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: AUTH_USER
         })
@@ -81,11 +83,13 @@ export function authUser({ userEmail, userPassword }) {
         })
             .then(res => {
                 if (res && res.success) {
+                    const accessToken = res.accessToken.split('Bearer ')[1];
                     dispatch({
                         type: AUTH_USER_SUCCESS,
-                        accessToken: res.accessToken.split('Bearer ')[1]
                     })
-                    setCookie('token', res.refreshToken, 'max-age=86400; path=/;');
+                    localStorage.setItem('token', res.refreshToken);
+                    setCookie('accessToken', accessToken, { maxAge: '86400', path: '/' });
+                    props.onLoginSuccess();
                 } else {
                     dispatch({
                         type: AUTH_USER_FAILED
@@ -102,8 +106,8 @@ export function authUser({ userEmail, userPassword }) {
 };
 
 //восстановить пароль
-export function forgotPassword(email) {
-    return function (dispatch) {
+export const forgotPassword: AppThunk = (email) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: FORGOT_PASSWORD
         })
@@ -129,8 +133,8 @@ export function forgotPassword(email) {
 };
 
 //сбросить пароль
-export function updatePassword({ password, token }, props) {
-    return function (dispatch) {
+export const updatePassword: AppThunk = ({ password, token }, props) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: UPDATE_PASSWORD
         })
@@ -157,8 +161,8 @@ export function updatePassword({ password, token }, props) {
 };
 
 //выход из профиля
-export function loggingOutUser(token, props) {
-    return function (dispatch) {
+export const loggingOutUser: AppThunk = (token, props) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: LOGIN_OUT
         })
@@ -168,7 +172,8 @@ export function loggingOutUser(token, props) {
                     dispatch({
                         type: LOGIN_OUT_SUCCESS
                     })
-                    deleteCookie('token');
+                    deleteCookie('accessToken');
+                    localStorage.removeItem('token');
                     props.onSuccess();
                 } else {
                     dispatch({
@@ -186,45 +191,46 @@ export function loggingOutUser(token, props) {
 };
 
 //обновление токена
-export function refrechTokenUser(props) {
-    return function (dispatch) {
+export const refreshTokenUser: AppThunk = (props) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
-            type: REFRECH_TOKEN
+            type: REFRESH_TOKEN
         })
-        const token = getCookie('token');
-        refrechToken(token)
+        const token = localStorage.getItem('token');
+        refreshToken(token)
             .then(res => {
                 if (res && res.success) {
+                    const accessToken = res.accessToken.split('Bearer ')[1];
                     dispatch({
-                        type: REFRECH_TOKEN_SUCCESS,
-                        accessToken: res.accessToken.split('Bearer ')[1]
+                        type: REFRESH_TOKEN_SUCCESS,
                     })
-                    setCookie('token', res.refreshToken, 'max-age=86400; path=/;');
+                    localStorage.setItem('token', res.refreshToken);
+                    setCookie('accessToken', accessToken, { maxAge: '86400', path: '/' });
                     if (props?.reRequest) {
                         if (props?.reRequest.data) {
-                            dispatch(props.data, props.reRequest(res.accessToken.split('Bearer ')[1]));
+                            dispatch(props.reRequest(props.data, accessToken));
                         }
-                        dispatch(props.reRequest(res.accessToken.split('Bearer ')[1]));
+                        dispatch(props.reRequest(accessToken));
                     }
                 } else {
                     dispatch({
-                        type: REFRECH_TOKEN_FAILED
+                        type: REFRESH_TOKEN_FAILED
                     })
                 }
             })
             .catch(error => {
-                error.json().then((err) => {
+                error.json().then((err: any) => {
                     if (err.message === 'Token is invalid') {
                         dispatch(loggingOutUser(token));
                     }
                     dispatch({
-                        type: REFRECH_TOKEN_FAILED,
+                        type: REFRESH_TOKEN_FAILED,
                         err: `Возникла ошибка: ${err.status}`
                     })
                 })
-                    .catch(err => {
+                    .catch((err: any) => {
                         dispatch({
-                            type: REFRECH_TOKEN_FAILED,
+                            type: REFRESH_TOKEN_FAILED,
                             err: `Возникла ошибка: ${err.status}`
                         })
                     })
@@ -233,8 +239,8 @@ export function refrechTokenUser(props) {
 };
 
 //получить данные пользователя
-export function getDataUser(token) {
-    return function (dispatch) {
+export const getDataUser: AppThunk = (token) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: GET_USER
         })
@@ -252,16 +258,16 @@ export function getDataUser(token) {
                 }
             })
             .catch(res => {
-                res.json().then((err) => {
+                res.json().then((err: any) => {
                     if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
-                        dispatch(refrechTokenUser({ reRequest: getDataUser }));
+                        dispatch(refreshTokenUser({ reRequest: getDataUser }));
                     }
                     dispatch({
                         type: GET_USER_FAILED,
                         err: `Возникла ошибка: ${err.status}`
                     })
                 })
-                    .catch(err => {
+                    .catch((err: any) => {
                         dispatch({
                             type: GET_USER_FAILED,
                             err: `Возникла ошибка: ${err.status}`
@@ -272,8 +278,8 @@ export function getDataUser(token) {
 };
 
 //изменить данные пользователя
-export function updateDataUser({ newDataUser, token }) {
-    return function (dispatch) {
+export const updateDataUser: AppThunk = ({ newDataUser, token }) => {
+    return function (dispatch: AppDispatch) {
         dispatch({
             type: UPDATE_USER
         })
@@ -291,9 +297,9 @@ export function updateDataUser({ newDataUser, token }) {
                 }
             })
             .catch(res => {
-                res.json().then((err) => {
+                res.json().then((err: any) => {
                     if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
-                        dispatch(refrechTokenUser({ reRequest: updateDataUser, data: newDataUser }));
+                        dispatch(refreshTokenUser({ reRequest: updateDataUser, data: newDataUser }));
                     } else {
                         dispatch({
                             type: UPDATE_USER_FAILED,
@@ -304,7 +310,7 @@ export function updateDataUser({ newDataUser, token }) {
             })
             .catch(err => {
                 dispatch({
-                    type: GET_USER_FAILED,
+                    type: UPDATE_USER_FAILED,
                     err: `Возникла ошибка: ${err.status}`
                 })
             })

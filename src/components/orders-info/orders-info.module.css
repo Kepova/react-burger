@@ -1,0 +1,42 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(max-content, 280px));
+    grid-template-rows: repeat(3, minmax(min-content, max-content));
+    row-gap: 60px;
+    position: relative;
+    width: 100%;
+    color: #F2F2F3;
+    overflow: overlay;
+}
+
+.title {
+    text-align: left;
+}
+
+.total {
+    color: #F2F2F3;
+    text-shadow: 3px 3px 20px rgba(51, 51, 255, .5),
+    3px 3px 15px rgba(51, 51, 255, .25);
+}
+
+.numbersOrders {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, minmax(max-content, min-content));
+    grid-template-rows: repeat(5, minmax(min-content, 1fr));
+    justify-items: start;
+}
+
+.doneOrders {
+    color: #00CCCC;
+}
+
+.allTotal {
+    grid-column: 1/3;
+    text-align: left;
+}
+
+.todayTotal {
+    grid-column: 1/3;
+    text-align: left;
+}

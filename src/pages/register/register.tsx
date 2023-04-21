@@ -5,9 +5,10 @@ import styles from './register.module.css';
 import { useState } from "react";
 import FormAuth from "../../components/form-auth/form-auth";
 import { createNewUser } from "../../redux/actions/actionsAuth";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import ModalError from "../../components/modal-error/modal-error";
 import { TOnChange } from '../../services/types';
+import { getCookie } from '../../utils/cookies-auth';
 
 const Register: FC = () => {
     interface IUserState {
@@ -29,19 +30,19 @@ const Register: FC = () => {
     const navigate = useNavigate();
 
     //redux
-    const createUserFailed = useSelector((store: any) => store.authReducer.createUserFailed);
-    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
+    const createUserFailed = useSelector((store) => store.authReducer.createUserFailed);
+    const accessToken = getCookie('accessToken');
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (accessToken !== null) {
+        if (accessToken) {
             navigate('/')
         }
     }, [accessToken]);
 
     const handlerSubmit = () => {
         const { userName, userEmail, userPassword } = userState;
-        dispatch(createNewUser({ userName, userEmail, userPassword }) as any);
+        dispatch(createNewUser({ userName, userEmail, userPassword }));
     };
 
     return (

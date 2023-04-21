@@ -2,9 +2,11 @@ import { useEffect, useState, FC } from 'react';
 import { Input, EmailInput, PasswordInput, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './profile.module.css';
 import { updateDataUser } from "../../redux/actions/actionsAuth";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from '../../redux/types/hooks';
 import Preloader from '../../components/preloader/preloader';
 import { THandlerSubmit, TOnChange } from '../../services/types';
+import { TDataUser } from '../../services/api-types';
+import { getCookie } from '../../utils/cookies-auth';
 
 const Profile: FC = () => {
     interface IUserState {
@@ -25,13 +27,13 @@ const Profile: FC = () => {
     };
 
     //redux
-    const dataUser = useSelector((store: any) => store.authReducer.dataUser);
-    const accessToken = useSelector((store: any) => store.authReducer.accessToken);
+    const dataUser = useSelector((store) => store.authReducer.dataUser);
+    const accessToken = getCookie('accessToken');
     const dispatch = useDispatch();
 
     //заполнить поля данными пользователя
     const setDataUser = () => {
-        const { name, email } = dataUser;
+        const { name, email } = dataUser as TDataUser;
         setUserState((userState) => ({ ...userState, userName: name, userEmail: email }));
     };
 
@@ -48,8 +50,8 @@ const Profile: FC = () => {
 
     //сопоставление данных пользователя
     useEffect(() => {
-        if ((userState.userName !== dataUser.name)
-            || (userState.userEmail !== dataUser.email)
+        if ((userState.userName !== dataUser?.name)
+            || (userState.userEmail !== dataUser?.email)
             || (userState.userPassword !== '')) {
             setIsChange(false);
         } else {
@@ -61,16 +63,16 @@ const Profile: FC = () => {
     const handlerClickSubmit: THandlerSubmit = (e) => {
         e.preventDefault();
         let newDataUser = {};
-        if (userState.userName !== dataUser.name) {
+        if (userState.userName !== dataUser?.name) {
             newDataUser = { ...newDataUser, name: userState.userName }
         }
-        if (userState.userEmail !== dataUser.email) {
+        if (userState.userEmail !== dataUser?.email) {
             newDataUser = { ...newDataUser, email: userState.userEmail }
         }
         if (userState.userPassword !== '') {
             newDataUser = { ...newDataUser, password: userState.userPassword }
         }
-        dispatch(updateDataUser({ newDataUser, token: accessToken }) as any);
+        dispatch(updateDataUser({ newDataUser, token: accessToken }));
     };
 
     return (
