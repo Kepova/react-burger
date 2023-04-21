@@ -57,7 +57,6 @@ export type TCreateNewUser = {
 
 export type TCreateNewUserSuccess = {
     readonly type: typeof CREATE_USER_SUCCESS,
-    accessToken: string
 };
 
 export type TCreateNewUserFailed = {
@@ -71,7 +70,6 @@ export type TAuthUser = {
 
 export type TAuthUserSuccess = {
     readonly type: typeof AUTH_USER_SUCCESS,
-    accessToken: string
 };
 
 export type TAuthUserFailed = {
@@ -124,7 +122,6 @@ export type TRefreshTokenUser = {
 
 export type TRefreshTokenUserSuccess = {
     readonly type: typeof REFRESH_TOKEN_SUCCESS,
-    accessToken: string
 };
 
 export type TRefreshTokenUserFailed = {

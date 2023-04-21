@@ -34,7 +34,7 @@ import {
     getUser,
     updateUser
 } from '../../utils/api-auth';
-import { setCookie, deleteCookie, getCookie } from '../../utils/cookies-auth';
+import { setCookie, deleteCookie } from '../../utils/cookies-auth';
 import { AppDispatch, AppThunk } from '../types/index';
 
 //регистрация пользователя
@@ -50,11 +50,12 @@ export const createNewUser: AppThunk = ({ userName, userEmail, userPassword }) =
         })
             .then(res => {
                 if (res && res.success) {
+                    const accessToken = res.accessToken.split('Bearer ')[1];
                     dispatch({
-                        type: CREATE_USER_SUCCESS,
-                        accessToken: res.accessToken.split('Bearer ')[1]
+                        type: CREATE_USER_SUCCESS
                     })
-                    setCookie('token', res.refreshToken, { maxAge: '86400', path: '/' });
+                    localStorage.setItem('token', res.refreshToken);
+                    setCookie('accessToken', accessToken, { maxAge: '86400', path: '/' });
                 } else {
                     dispatch({
                         type: CREATE_USER_FAILED
@@ -71,7 +72,7 @@ export const createNewUser: AppThunk = ({ userName, userEmail, userPassword }) =
 };
 
 //авторизация пользователя
-export const authUser: AppThunk = ({ userEmail, userPassword }) => {
+export const authUser: AppThunk = ({ userEmail, userPassword }, props) => {
     return function (dispatch: AppDispatch) {
         dispatch({
             type: AUTH_USER
@@ -82,11 +83,13 @@ export const authUser: AppThunk = ({ userEmail, userPassword }) => {
         })
             .then(res => {
                 if (res && res.success) {
+                    const accessToken = res.accessToken.split('Bearer ')[1];
                     dispatch({
                         type: AUTH_USER_SUCCESS,
-                        accessToken: res.accessToken.split('Bearer ')[1]
                     })
-                    setCookie('token', res.refreshToken, { maxAge: '86400', path: '/' });
+                    localStorage.setItem('token', res.refreshToken);
+                    setCookie('accessToken', accessToken, { maxAge: '86400', path: '/' });
+                    props.onLoginSuccess();
                 } else {
                     dispatch({
                         type: AUTH_USER_FAILED
@@ -169,7 +172,8 @@ export const loggingOutUser: AppThunk = (token, props) => {
                     dispatch({
                         type: LOGIN_OUT_SUCCESS
                     })
-                    deleteCookie('token');
+                    deleteCookie('accessToken');
+                    localStorage.removeItem('token');
                     props.onSuccess();
                 } else {
                     dispatch({
@@ -192,20 +196,21 @@ export const refreshTokenUser: AppThunk = (props) => {
         dispatch({
             type: REFRESH_TOKEN
         })
-        const token = getCookie('token');
+        const token = localStorage.getItem('token');
         refreshToken(token)
             .then(res => {
                 if (res && res.success) {
+                    const accessToken = res.accessToken.split('Bearer ')[1];
                     dispatch({
                         type: REFRESH_TOKEN_SUCCESS,
-                        accessToken: res.accessToken.split('Bearer ')[1]
                     })
-                    setCookie('token', res.refreshToken, { maxAge: '86400', path: '/' });
+                    localStorage.setItem('token', res.refreshToken);
+                    setCookie('accessToken', accessToken, { maxAge: '86400', path: '/' });
                     if (props?.reRequest) {
                         if (props?.reRequest.data) {
-                            dispatch(props.reRequest(props.data, res.accessToken.split('Bearer ')[1]));
+                            dispatch(props.reRequest(props.data, accessToken));
                         }
-                        dispatch(props.reRequest(res.accessToken.split('Bearer ')[1]));
+                        dispatch(props.reRequest(accessToken));
                     }
                 } else {
                     dispatch({

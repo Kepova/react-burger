@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { getOrderById, showCurrentOrder } from "../../redux/actions/actionsOrder";
 import Preloader from "../../components/preloader/preloader";
 import styles from './order.module.css';
-import { selectionIngredientsByCount } from "../../utils/selectionIngredientsBy";
+import { selectionIngredientsByCount, selectionIngredientsById } from "../../utils/selectionIngredientsBy";
 import calculateTimeIndicator from "../../utils/calculateTimeIndicator";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import calculateTotalPrice from "../../utils/calculateTotalPrice";
@@ -70,7 +70,7 @@ const Order: FC<{ wsConnect?: boolean }> = ({ wsConnect }) => {
                         {calculateTimeIndicator(currentOrder.createdAt)}
                     </p>
                     <p className={`text text_type_digits-default ${styles.totalPrice}`}>
-                        {calculateTotalPrice(ingredientsOrder)}
+                        {calculateTotalPrice(selectionIngredientsById(ingredients, currentOrder.ingredients))}
                         <span><CurrencyIcon type="primary" /></span>
                     </p>
                 </div>

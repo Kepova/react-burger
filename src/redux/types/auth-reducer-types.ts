@@ -2,7 +2,6 @@ import { TDataUser } from "../../services/api-types";
 
 export type TAuthState = {
   dataUser: null | TDataUser,
-  accessToken: null | string,
   createUserRequest: boolean,
   createUserFailed: null | string | undefined,
   loginUserFailed: null | string | undefined,

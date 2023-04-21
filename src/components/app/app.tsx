@@ -2,7 +2,7 @@ import { useEffect, FC } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { getIngredients } from '../../redux/actions/actions';
-import { getDataUser, refreshTokenUser } from '../../redux/actions/actionsAuth';
+import { getDataUser } from '../../redux/actions/actionsAuth';
 import style from './app.module.css';
 
 import AppHeader from '../app-header/app-header';
@@ -31,9 +31,9 @@ const App: FC = () => {
 
   const getUserRequest = useSelector((store) => store.authReducer.getUserRequest);
   const refreshTokenRequest = useSelector((store) => store.authReducer.refreshTokenRequest);
-  const accessToken = useSelector((store) => store.authReducer.accessToken);
   const getIngredientsRequest = useSelector((store) => store.ingredientsReducer.getIngredientsRequest);
   const wsConnected = useSelector(state => state.wsReducer.wsConnected);
+  const accessToken = getCookie('accessToken');
 
   //получение всех ингредиентов
   useEffect(() => {
@@ -42,11 +42,7 @@ const App: FC = () => {
 
   //получение данных пользователя 
   useEffect(() => {
-    const token = getCookie('token');
-    if (token && !accessToken) {
-      dispatch(refreshTokenUser(token));
-    }
-    if (token && accessToken) {
+    if (accessToken) {
       dispatch(getDataUser(accessToken));
     }
   }, [dispatch, accessToken]);
@@ -63,7 +59,10 @@ const App: FC = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/reset-password' element={<ResetPassword />} />
-          <Route path='profile' element={(getUserRequest || refreshTokenRequest) ? <Preloader /> : <ProtectedRouteElement element={<PersonalAccount />} />}>
+          <Route path='profile' element={
+            (getUserRequest || refreshTokenRequest) ? <Preloader />
+              : <ProtectedRouteElement element={<PersonalAccount />} />
+          }>
             <Route path='' element={<Profile />} />
             <Route path='orders' element={<ProfileOrders />} />
             {background ? <Route

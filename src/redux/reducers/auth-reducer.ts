@@ -29,7 +29,6 @@ import { TAuthState } from '../types/auth-reducer-types';
 
 const initialState: TAuthState = {
     dataUser: null,
-    accessToken: null,
     createUserRequest: false,
     createUserFailed: null,
     loginUserFailed: null,
@@ -64,7 +63,6 @@ export function authReducer(state = initialState, action: TActionsAuth): TAuthSt
         case CREATE_USER_SUCCESS: {
             return {
                 ...state,
-                accessToken: action.accessToken,
                 createUserRequest: false
             };
         }
@@ -86,7 +84,6 @@ export function authReducer(state = initialState, action: TActionsAuth): TAuthSt
         case AUTH_USER_SUCCESS: {
             return {
                 ...state,
-                accessToken: action.accessToken,
                 loginUserRequest: false
             };
         }
@@ -155,7 +152,6 @@ export function authReducer(state = initialState, action: TActionsAuth): TAuthSt
             return {
                 ...state,
                 dataUser: null,
-                accessToken: null,
                 loginOutRequest: false,
                 getUserSuccess: null
             };
@@ -178,7 +174,6 @@ export function authReducer(state = initialState, action: TActionsAuth): TAuthSt
         case REFRESH_TOKEN_SUCCESS: {
             return {
                 ...state,
-                accessToken: action.accessToken,
                 refreshTokenRequest: false
             };
         }

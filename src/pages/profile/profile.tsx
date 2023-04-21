@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from '../../redux/types/hooks';
 import Preloader from '../../components/preloader/preloader';
 import { THandlerSubmit, TOnChange } from '../../services/types';
 import { TDataUser } from '../../services/api-types';
+import { getCookie } from '../../utils/cookies-auth';
 
 const Profile: FC = () => {
     interface IUserState {
@@ -27,7 +28,7 @@ const Profile: FC = () => {
 
     //redux
     const dataUser = useSelector((store) => store.authReducer.dataUser);
-    const accessToken = useSelector((store) => store.authReducer.accessToken);
+    const accessToken = getCookie('accessToken');
     const dispatch = useDispatch();
 
     //заполнить поля данными пользователя

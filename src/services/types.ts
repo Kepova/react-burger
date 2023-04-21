@@ -2,7 +2,8 @@ import { Location } from 'history';
 import { ChangeEvent, FormEvent } from 'react';
 
 export type LocationState = {
-  background?: Location
+  background?: Location,
+  from?: string
 }
 
 export type TCard = {

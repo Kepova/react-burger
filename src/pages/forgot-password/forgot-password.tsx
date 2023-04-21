@@ -8,6 +8,7 @@ import ModalError from "../../components/modal-error/modal-error";
 import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { forgotPassword } from "../../redux/actions/actionsAuth";
 import { TOnChange } from "../../services/types";
+import { getCookie } from "../../utils/cookies-auth";
 
 const ForgotPassword: FC = () => {
     interface IUserState {
@@ -24,7 +25,7 @@ const ForgotPassword: FC = () => {
     };
 
     //redux
-    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const accessToken =  getCookie('accessToken');
     const forgotPasswordFailed = useSelector((store) => store.authReducer.forgotPasswordFailed);
     const isUpdatePassword = useSelector(store => store.authReducer.isUpdatePassword);
 
@@ -35,7 +36,7 @@ const ForgotPassword: FC = () => {
     };
 
     useEffect(() => {
-        if (accessToken !== null) {
+        if (accessToken) {
             navigate('/');
         }
         if (isUpdatePassword !== null) {

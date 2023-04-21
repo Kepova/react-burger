@@ -5,10 +5,11 @@ import OrderCard from '../../components/order-card/order-card';
 import { wsConnectionClosedAction, wsConnectionStart } from '../../redux/actions/actionsWS';
 import Preloader from '../../components/preloader/preloader';
 import { allOrders } from '../../redux/actions/actionsOrder';
+import { getCookie } from '../../utils/cookies-auth';
 
 const ProfileOrders: FC = () => {
     const dispatch = useDispatch();
-    const accessToken = useSelector(state => state.authReducer.accessToken);
+    const accessToken = getCookie('accessToken');
     const messages = useSelector(state => state.wsReducer.messages);
     const wsUrl = `wss://norma.nomoreparties.space/orders?token=${accessToken}`;
 

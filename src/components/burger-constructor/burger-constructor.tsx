@@ -20,6 +20,7 @@ import { useDrop } from "react-dnd";
 import { useNavigate } from 'react-router-dom';
 import Preloader from '../preloader/preloader';
 import { TCardConstructor, TCardIngredient } from '../../services/types';
+import { getCookie } from '../../utils/cookies-auth';
 
 // Компонент BurgerConstructor
 const BurgerConstructor: FC = () => {
@@ -42,7 +43,7 @@ const BurgerConstructor: FC = () => {
     const getOrderRequest = useSelector(store => store.constructorReducer.getOrderRequest);
     const openModalOrder = useSelector(store => store.constructorReducer.openModalOrder);
     const messageAddFilling = useSelector((store) => store.constructorReducer.messageAddFilling);
-    const accessToken = useSelector(store => store.authReducer.accessToken);
+    const accessToken = getCookie('accessToken');
     const dispatch = useDispatch();
 
     // обновить список ингредиентов конструктора
@@ -63,7 +64,9 @@ const BurgerConstructor: FC = () => {
         if ((dataCurrentBurger.length === 0) || (bunBurger === null)) {
             dispatch(informAddFilling());
         } else {
-            const ingredients: string[] = Array.from(dataCurrentBurger.concat(bunBurger), (obj: TCardIngredient): string => obj._id);
+            const ingredients: string[] =
+                Array.from(dataCurrentBurger.concat(bunBurger, bunBurger),
+                    (obj: TCardIngredient): string => obj._id);
             dispatch(getInfoOrder({ ingredients, token: accessToken }));
         }
     };

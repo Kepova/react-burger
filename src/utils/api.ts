@@ -6,7 +6,7 @@ const checkResponse = (res: Response) => {
     if (res.ok) {
         return res.json();
     } else {
-        return Promise.reject(`Возникла ошибка: ${res.status}`)
+        return Promise.reject(res);
     }
 };
 //получить все ингредиенты

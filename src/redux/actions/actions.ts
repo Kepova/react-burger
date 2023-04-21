@@ -57,7 +57,7 @@ export const getIngredients: AppThunk = () => {
             .catch(err => {
                 dispatch({
                     type: GET_INGREDIENTS_FAILED,
-                    err: err
+                    err: `Возникла ошибка: ${err.status}`
                 })
             })
     }
@@ -83,10 +83,6 @@ export const getInfoOrder: AppThunk = ({ ingredients, token }: TCreateOrder) => 
                 }
             })
             .catch(err => {
-                // dispatch({
-                //     type: GET_ORDER_FAILED,
-                //     err: err
-                // })
                 err.json().then((err: any) => {
                     if (err.message === 'jwt expired' || err.message === 'jwt malformed') {
                         dispatch(refreshTokenUser({ reRequest: getInfoOrder, data: ingredients }));

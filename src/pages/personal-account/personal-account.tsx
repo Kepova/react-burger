@@ -4,7 +4,6 @@ import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './personal-account.module.css';
 import { useDispatch } from '../../redux/types/hooks';
 import { loggingOutUser } from "../../redux/actions/actionsAuth";
-import { getCookie } from "../../utils/cookies-auth";
 
 const PersonalAccount: FC = () => {
     const location = useLocation();
@@ -12,7 +11,7 @@ const PersonalAccount: FC = () => {
     const dispatch = useDispatch();
 
     const handleClickOut = () => {
-        const token = getCookie('token');
+        const token = localStorage.getItem('token');
         dispatch(loggingOutUser(token, { onSuccess: () => navigate("/login") }));
     };
 

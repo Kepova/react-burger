@@ -1,14 +1,16 @@
 import { useEffect, useState, FC } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from './login.module.css';
 import FormAuth from "../../components/form-auth/form-auth";
 import ModalError from "../../components/modal-error/modal-error";
 import { authUser } from "../../redux/actions/actionsAuth";
 import { useDispatch, useSelector } from '../../redux/types/hooks';
-import { TOnChange } from '../../services/types';
+import { LocationState, TOnChange } from '../../services/types';
+import { getCookie } from '../../utils/cookies-auth';
 
 const Login: FC = () => {
+    const location = useLocation();
     interface IUserState {
         userEmail: string,
         userPassword: string,
@@ -27,16 +29,17 @@ const Login: FC = () => {
 
     //redux
     const loginUserFailed = useSelector((store) => store.authReducer.loginUserFailed);
-    const accessToken = useSelector((store) => store.authReducer.accessToken);
+    const accessToken = getCookie('accessToken');
     const dispatch = useDispatch();
+    const urlAfterAuth = (location.state as LocationState).from || '/';
 
     const handlerSubmit = () => {
         const { userEmail, userPassword } = userState;
-        dispatch(authUser({ userEmail, userPassword }));
+        dispatch(authUser({ userEmail, userPassword }, { onLoginSuccess: () => navigate(urlAfterAuth) }));
     };
 
     useEffect(() => {
-        if (accessToken !== null) {
+        if (accessToken) {
             navigate('/')
         }
     }, [accessToken]);
