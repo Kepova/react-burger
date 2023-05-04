@@ -5,5 +5,4 @@ export type TIngredientsState = {
     getIngredientsFailed: null | string | undefined,
     getIngredientsRequest: boolean,
     currentIngredient: null | TCardIngredient | undefined,
-    // openModalIngredients: boolean
   }

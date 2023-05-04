@@ -11,15 +11,15 @@ import {
 import { TActionsIngredients } from '../types/actions-types';
 import { TIngredientsState } from '../types/ingredients-reducer-types';
 
-const initialState: TIngredientsState = {
+export const initialState: TIngredientsState = {
   dataIngredients: [],
   getIngredientsFailed: null,
   getIngredientsRequest: false,
   currentIngredient: null,
-  // openModalIngredients: false
 }
 
-export function ingredientsReducer(state = initialState, action: TActionsIngredients): TIngredientsState {
+export function ingredientsReducer(state = initialState,
+  action: TActionsIngredients): TIngredientsState {
   switch (action.type) {
     case GET_INGREDIENTS: {
       return {
@@ -52,8 +52,6 @@ export function ingredientsReducer(state = initialState, action: TActionsIngredi
       return {
         ...state,
         currentIngredient: null,
-        // openModalIngredients: false,
-        dataIngredients: state.dataIngredients.map(obj => ({ ...obj, isInOrder: 0 }))
       }
     }
     case DRAG_FILLING: {

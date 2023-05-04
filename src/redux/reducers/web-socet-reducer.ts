@@ -8,7 +8,7 @@ import {
 import { TWSActions } from "../types/ws-types";
 
 
-const initialState: TWSState = {
+export const initialState: TWSState = {
     wsConnected: false,
     messages: null
 };

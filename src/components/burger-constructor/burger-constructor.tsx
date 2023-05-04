@@ -17,7 +17,7 @@ import {
 } from '../../redux/actions/actions';
 
 import { useDrop } from "react-dnd";
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Preloader from '../preloader/preloader';
 import { TCardConstructor, TCardIngredient } from '../../services/types';
 import { getCookie } from '../../utils/cookies-auth';
@@ -25,6 +25,7 @@ import { getCookie } from '../../utils/cookies-auth';
 // Компонент BurgerConstructor
 const BurgerConstructor: FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     // DnD контейнер
     const [, dropTarget] = useDrop({
@@ -58,8 +59,9 @@ const BurgerConstructor: FC = () => {
 
     //оформить заказ
     const clickPlaceOrder = () => {
-        if (accessToken === null) {
-            return navigate('/login')
+
+        if (!accessToken) {
+            return navigate('/login', { state: { from: location } })
         }
         if ((dataCurrentBurger.length === 0) || (bunBurger === null)) {
             dispatch(informAddFilling());
@@ -72,12 +74,12 @@ const BurgerConstructor: FC = () => {
     };
 
     return (
-        <section className={`${style.burgerConstructor} pl-4 pb-13`} ref={dropTarget}>
+        <section className={`${style.burgerConstructor} pl-4 pb-13`} ref={dropTarget} id='burger-constructor'>
             <>
                 {getOrderFailed && <ModalError openError={getOrderFailed} />}
                 {messageAddFilling && <ModalError openError={messageAddFilling} />}
                 {getOrderRequest && <Preloader />}
-                <div className={`pl-8 pb-4 pr-4`}>
+                <div className={`pl-8 pb-4 pr-4`} id='bun-top'>
                     {bunBurger?._id ?
                         <ConstructorElement type="top"
                             isLocked={true}
@@ -88,7 +90,7 @@ const BurgerConstructor: FC = () => {
                         : <p>Добавьте булку</p>
                     }
                 </div>
-                <div className={`${style.burgerFillingsContainer}`}>
+                <div className={`${style.burgerFillingsContainer}`} id='fillings'>
                     <ul className={`${style.burgerFillings} custom-scroll pr-4`}>
                         {dataCurrentBurger.length > 0 ?
                             dataCurrentBurger.map((card: TCardConstructor, i: number) =>
@@ -100,7 +102,7 @@ const BurgerConstructor: FC = () => {
                             : <p>Добавьте начинку</p>}
                     </ul>
                 </div>
-                <div className={`pt-4 pl-8 pr-4`}>
+                <div className={`pt-4 pl-8 pr-4`} id='bun-bottom'>
                     {bunBurger?._id ?
                         <ConstructorElement
                             type="bottom"
