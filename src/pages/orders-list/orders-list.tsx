@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../redux/types/hooks';
 import { wsConnectionStart, wsConnectionClosedAction } from '../../redux/actions/actionsWS';
 import AllOrders from '../../components/all-orders/all-orders';
@@ -38,7 +39,7 @@ const OrdersList: FC = () => {
                         totalToday={messages.totalToday} />
                 </>
             }
-
+            <Outlet />
         </section>
     )
 };

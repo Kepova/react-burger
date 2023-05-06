@@ -1,4 +1,5 @@
 import {FC} from 'react';
+import { Outlet } from 'react-router-dom';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import mainStyle from './main.module.css';
@@ -15,6 +16,7 @@ const Main: FC = () => {
                 <BurgerIngredients />
                 <BurgerConstructor />
             </main >
+            <Outlet/>
         </DndProvider>
     )
 };

@@ -1,8 +1,9 @@
 import '@4tw/cypress-drag-drop';
+import { BASE_URL } from '../../src/utils/api';
 
 describe('burger constructor works correctly', function () {
   before(function () {
-    cy.visit('http://localhost:3000');
+    cy.visit('react-burger');
   });
 
   it('burger constructor has the right content', function () {
@@ -31,7 +32,7 @@ describe('burger constructor works correctly', function () {
     cy.get('button').contains('Войти').click();
     cy.get('button').contains('Оформить заказ').click();
 
-    cy.intercept('POST', 'https://norma.nomoreparties.space/api/orders').as('post-orders');
+    cy.intercept('POST', `${BASE_URL}/orders`).as('post-orders');
     cy.wait('@post-orders', { timeout: 16000 }).its('response.body.order.number').then((number) => {
       cy.contains(number)
     });

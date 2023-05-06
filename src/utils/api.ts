@@ -1,8 +1,8 @@
 import { TCreateOrder } from "../services/api-types";
 
-const BASE_URL = 'https://norma.nomoreparties.space/api';
+export const BASE_URL = 'https://norma.nomoreparties.space/api';
 
-const checkResponse = (res: Response) => {
+export const checkResponse = (res: Response) => {
     if (res.ok) {
         return res.json();
     } else {
