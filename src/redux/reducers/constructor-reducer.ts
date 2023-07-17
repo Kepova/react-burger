@@ -1,3 +1,4 @@
+import calculateTotalPrice from '../../utils/calculateTotalPrice';
 import {
   INGREDIENTS_CONSTRUCTOR,
   SUM_ORDER,
@@ -13,7 +14,7 @@ import {
 import { TActionsConstructor } from '../types/actions-types';
 import { TConstructorState } from '../types/constructor-reducer-types';
 
-const initialState: TConstructorState = {
+export const initialState: TConstructorState = {
   dataCurrentBurger: [],
   bunBurger: null,
   dataOrder: null,
@@ -34,14 +35,11 @@ export const constructorReducer = (state = initialState, action: TActionsConstru
       }
     }
     case SUM_ORDER: {
-      const sumBun = state.bunBurger ? (state.bunBurger.price * 2) : 0;
-      const sumFilling = state.dataCurrentBurger.reduce((accumulator, currentObj) => {
-        return accumulator + currentObj.price
-      }, 0);
+      const sumBurger = calculateTotalPrice([...state.dataCurrentBurger, state.bunBurger, state.bunBurger]);
 
       return {
         ...state,
-        totalPrice: sumBun + sumFilling
+        totalPrice: sumBurger
       };
     }
     case GET_ORDER: {

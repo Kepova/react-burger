@@ -20,7 +20,7 @@ const BurgerIngredientsCard: FC<{ card: TCardIngredient }> = ({ card }) => {
             state={{ background: location }}
             className={`${style.cardLink}`}>
             <div className={`${style.card__container}`}
-                ref={dragRef}>
+                ref={dragRef} id='ingredient-link'>
                 <img src={card.image} alt={card.name} className={`pl-4 pr-4`} />
                 <Counter count={card.isInOrder} size="default" extraClass="m-1" />
                 <div className={`${style.card__price} pt-1 pb-1`}>

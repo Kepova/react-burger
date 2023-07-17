@@ -27,7 +27,7 @@ import {
 import { TActionsAuth } from '../types/actions-auth-types';
 import { TAuthState } from '../types/auth-reducer-types';
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
     dataUser: null,
     createUserRequest: false,
     createUserFailed: null,

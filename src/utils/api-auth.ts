@@ -1,14 +1,6 @@
 import { TCreateUser, TLoginUser, TResetPassword, TUpdateUser } from "../services/api-types";
+import { BASE_URL, checkResponse } from "./api";
 
-export const BASE_URL = 'https://norma.nomoreparties.space/api';
-
-const checkResponse = (res: Response) => {
-    if (res.ok) {
-        return res.json();
-    } else {
-        return Promise.reject(res);
-    }
-};
 //зарегистрировать пользователя
 export const createUser = ({ email, password, name }: TCreateUser) => {
     return fetch(`${BASE_URL}/auth/register`, {

@@ -8,7 +8,7 @@ import {
 import { TActionOrder } from "../types/actions-order-types";
 import { TOrderState } from "../types/orders-types";
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
     orders: null,
     currentOrder: null,
     getOrderFailed: false,

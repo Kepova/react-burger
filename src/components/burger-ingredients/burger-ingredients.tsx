@@ -23,7 +23,7 @@ const BurgerIngredients: FC = () => {
     const filteredIngredientSauce = useMemo(() => filterIngredients('sauce'), [dataIngredients]);
     const filteredIngredientMain = useMemo(() => filterIngredients('main'), [dataIngredients]);
 
-    return (<section className={`${styles.ingredients}`}>
+    return (<section className={`${styles.ingredients}`} id='ingredients'>
         <>
             {getIngredientsFailed && <ModalError openError={getIngredientsFailed} />}
             <div className={`${styles.burgerIngridients}`}>

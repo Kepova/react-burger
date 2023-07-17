@@ -53,8 +53,29 @@ const App: FC = () => {
       {getIngredientsRequest ? <Preloader />
         :
         <Routes>
-          <Route path='/' element={<Main />} />
-          <Route path='/feed' element={<OrdersList />} />
+          <Route path='/' element={<Main />}>
+            {background ?
+              <Route
+                path='/ingredients/:id'
+                element={
+                  <Modal title={'Детали ингредиента'}>
+                    <IngredientDetails />
+                  </Modal>
+                }
+              />
+              : <Route path='/ingredients/:id' element={<IngredientDetails />} />
+            }
+          </Route>
+          <Route path='/feed' element={<OrdersList />} >
+            {background ? <Route
+              path='/feed/:id'
+              element={
+                <Modal>
+                  <Order wsConnect={wsConnected} />
+                </Modal>}
+            />
+              : <Route path='/feed/:id' element={<Order />} />}
+          </Route>
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
@@ -74,25 +95,8 @@ const App: FC = () => {
             />
               : <Route path='/profile/orders/:id' element={<Order />} />}
           </Route>
-          {background ? <Route
-            path='/feed/:id'
-            element={
-              <Modal>
-                <Order wsConnect={wsConnected} />
-              </Modal>}
-          />
-            : <Route path='/feed/:id' element={<Order />} />}
-          {background ?
-            <Route
-              path='/ingredients/:id'
-              element={
-                <Modal title={'Детали ингредиента'}>
-                  <IngredientDetails />
-                </Modal>
-              }
-            />
-            : <Route path='/ingredients/:id' element={<IngredientDetails />} />
-          }
+
+
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       }
